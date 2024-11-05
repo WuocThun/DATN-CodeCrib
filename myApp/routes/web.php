@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\admin\PaymentController;
 use App\Http\Controllers\admin\VIPController;
+use App\Http\Controllers\IndexController;
 
 Route::get('/', function () {
     return view('Demo.index');
@@ -169,5 +170,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])
          ->name('profile.destroy');
 });
+// danh update VIEW 
 
+Route::get('/phong-ngu',[IndexController::class,'phongNgu'])->name('index.chothuephongtro');
+Route::get('/login-navbar',[IndexController::class,'loginNav'])->name('index.loginNav');
+// 
 require __DIR__ . '/auth.php';
