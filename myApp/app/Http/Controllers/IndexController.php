@@ -14,11 +14,12 @@ class IndexController extends Controller
         return view('Demo.login_navbar');
 
     }
-    public function nhaVeSinh() {
-        
+    public function home() {
+       return view('Demo.homepage'); 
     }
-    public function nhaBep() {
-        
+    public function detail() {
+        return view('Demo.detail'); 
+ 
     }
 
 }

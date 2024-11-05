@@ -172,10 +172,10 @@ Route::middleware('auth')->group(function () {
 });
 // danh update VIEW
 
-Route::get('/phong-ngu',[IndexController::class,'phongNgu'])->name('index.chothuephongtro');
+Route::get('/cho-thue-phong-tro',[IndexController::class,'cho-thue-phong-tro'])->name('index.chothuephongtro');
 Route::get('/login-navbar',[IndexController::class,'loginNav'])->name('index.loginNav');
-//
-// BINH FE
-Route::get('/admin-core/index', [RoomController::class, 'indexCore']) ->name('admin-core.indexCore');
+Route::get('/homepage',[IndexController::class,'homepage'])->name('index.homepage');
+Route::get('/detail',[IndexController::class,'detail'])->name('index.detail');
+
 //
 require __DIR__ . '/auth.php';
