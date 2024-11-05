@@ -170,12 +170,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])
          ->name('profile.destroy');
 });
-// danh update VIEW 
+// danh update VIEW
 
 Route::get('/cho-thue-phong-tro',[IndexController::class,'cho-thue-phong-tro'])->name('index.chothuephongtro');
 Route::get('/login-navbar',[IndexController::class,'loginNav'])->name('index.loginNav');
 Route::get('/homepage',[IndexController::class,'homepage'])->name('index.homepage');
 Route::get('/detail',[IndexController::class,'detail'])->name('index.detail');
 
-// 
+//
 require __DIR__ . '/auth.php';

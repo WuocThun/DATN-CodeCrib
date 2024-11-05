@@ -278,4 +278,8 @@ class RoomController extends Controller
         return response()->json($wards);
     }
 
+    public function indexCore()
+        {
+            return view ('admin_core.content.index');
+        }
 }
