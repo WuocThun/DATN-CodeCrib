@@ -14,7 +14,7 @@ use App\Http\Controllers\admin\PaymentController;
 use App\Http\Controllers\admin\VIPController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('Demo.index');
 });
 // Route group với middleware 'auth' và tiền tố 'admin'
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
@@ -158,8 +158,8 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 //? END BLOGS CONTROLLER
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    return view('Demo.index');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])
