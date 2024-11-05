@@ -42,8 +42,8 @@
   .main-nav ul {
     list-style: none;
     display: flex;
-    gap: 20px;
-    
+    gap: 10px;
+    margin-left:10px ;
   }
   .main-nav ul li a:hover{
   color: red;
