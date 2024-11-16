@@ -7,6 +7,7 @@ use Spatie\Permission\Models\Permission;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\BlogsController;
+use App\Http\Controllers\Admin\FindFeController;
 use App\Http\Controllers\Admin\RoomsClassificationController;
 use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\UserController;
@@ -177,5 +178,13 @@ Route::get('/login-navbar',[IndexController::class,'loginNav'])->name('index.log
 Route::get('/homepage',[IndexController::class,'homepage'])->name('index.homepage');
 Route::get('/detail',[IndexController::class,'detail'])->name('index.detail');
 
-//
+///Findfe
+Route::get('/findfes', [FindFeController::class, 'index'])->name('findfes.index');
+Route::get('/findfes/create', [FindFeController::class, 'create'])->name('findfes.create');
+Route::post('/findfes', [FindFeController::class, 'store'])->name('findfes.store');
+Route::get('/findfes/{findfe}/edit', [FindFeController::class, 'edit'])->name('findfes.edit');
+Route::put('/findfes/{id}', [FindFeController::class, 'update'])->name('findfes.update');
+Route::delete('/findfes/{findfe}', [FindFeController::class, 'destroy'])->name('findfes.destroy');
+
+
 require __DIR__ . '/auth.php';
