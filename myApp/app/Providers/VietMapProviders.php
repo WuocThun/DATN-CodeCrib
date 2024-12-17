@@ -22,7 +22,7 @@ class VietMapProviders extends ServiceProvider
         try {
             // Gửi yêu cầu GET đến API
             $response
-                  = $this->client->get('https://vapi.vnappmob.com/api/province/');
+                  = $this->client->get('https://vapi.vnappmob.com/api/v2/province/');
             $data = json_decode($response->getBody(), true);
 
             // Kiểm tra dữ liệu
@@ -51,7 +51,7 @@ class VietMapProviders extends ServiceProvider
     public function getDistrictData($districtId)
     {
         // Gọi API để lấy danh sách quận
-        $response = $this->client->get('https://vapi.vnappmob.com/api/province/district/' . $districtId);
+        $response = $this->client->get('https://api.vnappmob.com/api/v2/province/district/' . $districtId);
 
         // Giải mã nội dung JSON
         $districtData = json_decode($response->getBody()->getContents(), true);
@@ -70,7 +70,7 @@ class VietMapProviders extends ServiceProvider
     public function getProvinces()
     {
         $response
-            = $this->client->get('https://vapi.vnappmob.com/api/province/');
+            = $this->client->get('https://api.vnappmob.com/api/v2/province/');
 
         return json_decode($response->getBody()->getContents(), true);
     }
@@ -78,7 +78,7 @@ class VietMapProviders extends ServiceProvider
     public function getDistricts($provinceId)
     {
         $response
-            = $this->client->get("https://vapi.vnappmob.com/api/province/district/$provinceId");
+            = $this->client->get("https://api.vnappmob.com/api/v2/province/district/$provinceId");
 
         return json_decode($response->getBody()->getContents(), true);
     }
@@ -86,7 +86,7 @@ class VietMapProviders extends ServiceProvider
     public function getWards($districtId)
     {
         $response
-            = $this->client->get("https://vapi.vnappmob.com/province/ward/$districtId");
+            = $this->client->get("https://api.vnappmob.com/api/v2/province/ward/$districtId");
 
         return json_decode($response->getBody()->getContents(), true);
     }

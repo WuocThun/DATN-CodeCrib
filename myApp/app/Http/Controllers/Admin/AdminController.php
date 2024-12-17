@@ -20,7 +20,7 @@ class AdminController extends Controller
 
     public function adminCore()
     {
-        return view("admin_core.content.test    ");
+        return view("admin_core.content.test");
     }
 
     public function reportSystem(Request $request)

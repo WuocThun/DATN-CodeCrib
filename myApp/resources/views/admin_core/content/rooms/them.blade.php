@@ -347,7 +347,7 @@
                 $('#ward').prop('disabled', true).empty().append('<option value="">Chọn phường</option>');
 
                 if (provinceId) {
-                    $.get('https://vapi.vnappmob.com/api/province/district/' + provinceId, function (data) {
+                    $.get('https://api.vnappmob.com/api/v2/province/district/' + provinceId, function (data) {
                         $.each(data.results, function (index, district) {
                             $('#district').append('<option value="' + district.district_id + '">' + district.district_name + '</option>');
                         });
@@ -362,7 +362,7 @@
                 $('#ward').prop('disabled', true).empty().append('<option value="">Chọn phường</option>');
 
                 if (districtId) {
-                    $.get('https://vapi.vnappmob.com/api/province/ward/' + districtId, function (data) {
+                    $.get('https://api.vnappmob.com/api/v2/province/ward/' + districtId, function (data) {
                         $.each(data.results, function (index, ward) {
                             $('#ward').append('<option value="' + ward.ward_id + '">' + ward.ward_name + '</option>');
                         });
