@@ -1,9 +1,7 @@
 @extends('fe.layouts.app')
-
 @section('searchBar')
     @include('fe.inc.search_bar')
 @endsection
-
 @section('main')
     <style>
 
@@ -65,18 +63,12 @@
 
     </style>
     <div class="container con-404">
-        <h1 class="h1-404">404</h1>
+        <h1 class="h1-404">403</h1>
         <h2 class="h2-404">Không tìm thấy đường dẫn này
         </h2>
-        <p class="p-404">Bên dưới là 1 số tin đăng mới được cập nhật mà bạn có thể tham khảo
-
-        </p>
-        {{--        <a href="index.html" class="home-button">Go Back Home</a>--}}
     </div>
 @endsection
-@section('overView')
-    @include('fe.inc.over_view')
-@endsection
+
 @section('footer')
     @include('fe.inc.footer')
 @endsection

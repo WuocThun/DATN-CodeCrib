@@ -2,8 +2,8 @@
 
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-        <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-laugh-wink"></i>
+        <div class="sidebar-brand-icon">
+            <img src="{{asset('uploads/logoCodeCrib.png')}}" alt="" class="img-thumbnail">
         </div>
         <div class="sidebar-brand-text mx-3">CodeCrib</div>
     </a>
@@ -15,7 +15,7 @@
     <li class="nav-item active">
         <a class="nav-link" href="#">
             <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Thống kê</span></a>
+            <span>Giới thiệu về CodeCrib </span></a>
     </li>
 
     <!-- Divider -->

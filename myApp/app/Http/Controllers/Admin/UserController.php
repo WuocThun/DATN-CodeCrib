@@ -148,10 +148,26 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        // Lấy thông tin người dùng theo ID
-        $user = User::findOrFail($id);
+        try {
+            // Kiểm tra nếu ID của user đang đăng nhập trùng với ID được truyền vào
+            if (auth()->id() == $id) {
+                // Lấy thông tin người dùng theo ID
+                $user = User::findOrFail($id);
 
-        return view('admin_core.content.users.edit', compact('user'));
+                // Trả về view edit và truyền biến $user
+                return view('admin_core.content.users.edit', compact('user'));
+            } else {
+                // Nếu không đúng quyền, trả về lỗi 403
+                abort(403, 'Bạn không có quyền chỉnh sửa thông tin này.');
+            }
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // Xử lý khi không tìm thấy user theo ID
+            return redirect()->back()->with('error', 'Người dùng không tồn tại.');
+        } catch (\Exception $e) {
+            // Xử lý các lỗi khác
+            return redirect()->back()->with('error', 'Đã xảy ra lỗi: ' . $e->getMessage());
+        }
+
     }
 
     /**

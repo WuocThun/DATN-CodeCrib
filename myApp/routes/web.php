@@ -92,11 +92,13 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
          Route::group(['middleware' => ['auth']], function () {
              Route::get('/tat-ca-gop-y',
                  [ReviewController::class, 'getAllReview'])
-                  ->name('reviews.getAllReview');
+                  ->name('reviews.getAllReview')->middleware('role:admin');
+
              Route::get('/tat-ca-binh-luan',
                  [CommentController::class, 'listAllComtent'])
-                  ->name('comments.listAllComtent');
-              // Route cho quản lý vai trò, chỉ cho phép người dùng có quyền quản lý vai trò
+                  ->name('comments.listAllComtent')->middleware('role:admin');
+
+             // Route cho quản lý vai trò, chỉ cho phép người dùng có quyền quản lý vai trò
              Route::get("/", [AdminController::class, 'index'])->name('index');
              Route::get("/reportSystem",
                  [AdminController::class, 'reportSystem'])
@@ -105,7 +107,7 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
              Route::get('/addRole', [PermissionController::class, 'getAssgin'])
                   ->name('addRole')->middleware('permission:create role');
              Route::get('/allUser', [PermissionController::class, 'getAllUser'])
-                  ->name('allUser')->middleware('permission:create role');
+                  ->name('allUser')->middleware('role:admin');
              Route::get('/getAssgin/{id}',
                  [PermissionController::class, 'assgin'])
                   ->name('assgin')->middleware('permission:assign role');
@@ -160,7 +162,7 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
 
              // Route cho quyền 'add blogs' với phương thức 'GET' cho 'create' và 'POST' cho 'store'
              Route::get('/blogs/index', [BlogsController::class, 'index'])
-                  ->name('blogs.index')->middleware('permission:all blogs');
+                  ->name('blogs.index')->middleware('role:admin');
              Route::get('/blogs/myblogs', [BlogsController::class, 'myblogs'])
                   ->name('blogs.myblogs')
                   ->middleware('permission:view my blogs');
@@ -192,7 +194,8 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
                  [RoomController::class, 'myRoomsCore'])->name('phongcuatoi');
              Route::get('/phong/dang-tin-moi',
                  [RoomController::class, 'createCore'])
-                  ->name('roomsCore.createCore');
+                  ->name('roomsCore.createCore')
+                  ->middleware('role:admin||houseRenter');
              Route::post('phong/dang-tin-moi',
                  [RoomController::class, 'storeCore'])
                   ->name('roomsCore.storeCore');
@@ -206,20 +209,21 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
                   ->name('trangChuNapThe');
              Route::get('/nap-the/vnpay', [PaymentController::class, 'vnpay'])
                   ->name('vnpay');
-             Route::post('/nap-the/vnpay', [VnpayController::class, 'vnpayPayment'])
+             Route::post('/nap-the/vnpay',
+                 [VnpayController::class, 'vnpayPayment'])
                   ->name('vnpay.store');
              Route::get('/nap-the/lich-su',
                  [PaymentController::class, 'getHistoryPayment'])
                   ->name('lichSuNapThe');
              Route::get('/nap-the/bao-cao',
                  [PaymentController::class, 'report'])
-                  ->name('payment.report');
+                  ->name('payment.report')->middleware('role:admin');
+
          });
          // Resource route cho RoomController, kiểm tra quyền truy cập
          Route::group(['middleware' => ['auth']], function () {
              Route::resource('tien-ich', UtilityController::class)
-                  ->names('utilities');
-
+                  ->names('utilities')->middleware('role:admin');
          });
          Route::group(['middleware' => ['auth']], function () {
              Route::get('/rooms/index', [RoomController::class, 'index'])
@@ -229,15 +233,16 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
              Route::get('/rooms/getPendingRooms',
                  [RoomController::class, 'getPendingRooms'])
                   ->name('rooms.getPendingRooms')
-                  ->middleware('permission:all blogs');
+                  ->middleware('role:admin');
              Route::get('/rooms/viewPendingRooms/{room}',
                  [RoomController::class, 'viewPendingRooms'])
                   ->name('rooms.viewPendingRooms')
                   ->middleware('permission:all blogs');
              Route::get('/rooms/allRooms', [RoomController::class, 'allRooms'])
-                  ->name('rooms.allRooms')->middleware('permission:all blogs');
+                  ->name('rooms.allRooms')->middleware('role:admin');
              Route::get('/rooms/myRooms', [RoomController::class, 'myRooms'])
-                  ->name('rooms.myRooms');
+                  ->name('rooms.myRooms')
+                  ->middleware('role:admin||houseRenter');
              Route::post('/rooms/store', [RoomController::class, 'store'])
                   ->name('rooms.store')->middleware('permission:all blogs');
              Route::get('rooms/{id}/edit', [RoomController::class, 'edit'])
@@ -250,15 +255,15 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
              Route::post('room/{id}/denial',
                  [RoomController::class, 'denialRoom'])
                   ->name('room.denialRoom');
-             Route::get('room/report', [RoomController::class, 'report'])
-                  ->name('room.report');
-             Route::delete('rooms/{blog}',
+             Route::get('rooms/report', [RoomController::class, 'report'])
+                  ->name('room.report')->middleware('role:admin');
+             Route::delete('rooms/{id}',
                  [RoomController::class, 'destroy'])->name('rooms.destroy')
                   ->middleware('permission:delete blogs');
              Route::resource('/rooms_classification',
                  RoomsClassificationController::class)
                   ->names('rooms_classification')
-                  ->middleware('permission:manager rooms_classification');
+                 ->middleware('role:admin');
          });
          // Resource route cho UserController, kiểm tra quyền truy cập
          Route::group(['middleware' => ['auth']], function () {
@@ -276,7 +281,8 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
                  [ProfileController::class, 'updatePassword'])
                   ->name('profile.password.update');
              Route::get('/user-report', [UserController::class, 'report'])
-                  ->name('user.report');
+                  ->name('user.report')->middleware('role:admin');
+
              Route::delete('/users/{id}', [UserController::class, 'deleteUser'])
                   ->name('users.delete');
 
@@ -356,7 +362,8 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
                  [ContractController::class, 'deleteContract'])
                   ->name('contracts.cancel');
              Route::get('/motel/report', [MotelController::class, 'report'])
-                  ->name('statistics');
+                  ->name('statistics')->middleware('role:admin');
+
              Route::post('/requests/create',
                  [MotelController::class, 'createRequest'])
                   ->name('requests.create');
@@ -364,7 +371,7 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
          });
          Route::group(['middleware' => ['auth']], function () {
              Route::get('/danh-sach-day-tro', [MotelController::class, 'index'])
-                  ->name('motel.index');
+                  ->name('motel.index')->middleware('role:admin||houseRenter');
              Route::get('/them-phong-tro', [MotelController::class, 'create'])
                   ->name('motel.create');
 
@@ -390,7 +397,9 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
                   ->name('invoices.pay');
              Route::get('/phong/bao-cao',
                  [InvoiceController::class, 'motelReport'])
-                  ->name('invoices.motelReport');
+                  ->name('invoices.motelReport')
+                  ->middleware('role:admin||houseRenter');
+
              Route::post('/invoices/pay/{id}',
                  [InvoiceController::class, 'acceptPay'])
                   ->name('invoices.acceptPay');
@@ -398,13 +407,16 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
                  [InvoiceController::class, 'prepay'])->name('invoices.prepay');
              Route::get('/invoices/list',
                  [InvoiceController::class, 'getIndexInvoice'])
-                  ->name('invoices.getIndexInvoice');
+                  ->name('invoices.getIndexInvoice')
+                  ->middleware('role:admin||houseRenter');
+
              Route::get('/export-invoices', function () {
                  return Excel::download(new InvoiceExport(), 'invoices.xlsx');
              })->name('export.invoices');
              //             Route::get('/motel/{id}/access', [MotelController::class, 'accessRoomForm'])->name('motel.access.form');
              Route::get('/room-access', [MotelController::class, 'roomAccess'])
-                  ->name('motel.access.form');
+                  ->name('motel.access.form')->middleware('role:admin||viewer');
+
              Route::post('/motel/leave', [MotelController::class, 'leaveRoom'])
                   ->name('motel.leave');
              Route::post('/motel/{id}/access',
