@@ -1,7 +1,4 @@
-@extends('admin.layouts.app')
-@section('navbar')
-    @include('admin.inc.navbar')
-@endsection
+@extends('admin_core.layouts.test')
 @section('main')
     <div class="container-fluid">
         <div class="row justify-content-center">
@@ -37,9 +34,7 @@
                                             <th>{{$us->email}}</th>
                                             <th>
                                                 @foreach($us->roles as $key1 => $roles)
-                                                    <span class="badge bg-primary">{{$roles->name}}</span>
-
-
+                                                    <span class="badge bg-info">{{$roles->name}}</span>
                                                 @endforeach
                                             </th>
                                             <th>
@@ -52,6 +47,11 @@
                                                     vai trò</a>
                                                 <a href="{{route('admin.permission',$us->id)}}" class="btn btn-success">Phân
                                                     thêm quyền</a>
+                                                <form method="post"  action="{{route('admin.users.delete',[$us->id])}}">
+                                                    @method('DELETE')
+                                                    @csrf
+                                                    <button onclick="return confirm('Bạn có muốn xoá?')" class="btn btn-danger">Xoá</button>
+                                                </form>
                                             </th>
                                         </tr>
                                     @endforeach

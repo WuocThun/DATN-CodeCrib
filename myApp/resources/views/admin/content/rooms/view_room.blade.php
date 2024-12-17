@@ -1,7 +1,5 @@
-@extends('admin.layouts.app')
-@section('navbar')
-    @include('admin.inc.navbar')
-@endsection
+@extends('admin_core.layouts.test')
+
 @section('main')
     <link rel="stylesheet" href="{{asset('style/css/style.css')}}"/>
     <link

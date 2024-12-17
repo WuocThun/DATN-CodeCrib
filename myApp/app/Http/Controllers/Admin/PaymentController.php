@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use PayOS\PayOS;
 use App\Models\OrderPayment;
+use Illuminate\Support\Facades\DB;
+
 class PaymentController extends Controller
 {
 
@@ -18,23 +20,31 @@ class PaymentController extends Controller
     //        $this->payOSApiKey =env('PAYOS_API_KEY');
     //        $this->payOSChecksumKey= env('PAYOS_CHECKSUM_KEY');
     //    }
+    public function indexPayment()
+    {
+        return view('admin_core.content.payments.index');
+    }
+
     public function createPaymentLink(Request $request)
     {
-        $data         = $request->all();
-        $orderCode    = intval(substr(strval(microtime(true) * 10000), -6));
-        $getAmount    = intval($data['amount']);
-        $getUserId    = auth()->id();
-        $getUserPhone = substr(auth()->user()->phone_number, -3);
-        $description = "Crib " . $getUserId . " " . $getUserPhone;
-        $orderPayment = new OrderPayment();
-        $orderPayment->amount = $getAmount;
+        $data                         = $request->all();
+        $orderCode                    = intval(substr(strval(microtime(true)
+                                                             * 10000), -6));
+        $getAmount                    = intval($data['amount']);
+        $getUserId                    = auth()->id();
+        $getUserPhone                 = substr(auth()->user()->phone_number,
+            -3);
+        $description                  = "Crib " . $getUserId . " "
+                                        . $getUserPhone;
+        $orderPayment                 = new OrderPayment();
+        $orderPayment->amount         = $getAmount;
         $orderPayment->payment_status = '0';
-        $orderPayment->description = $description;
-        $orderPayment->order_code = $orderCode;
-        $orderPayment->user_id = $getUserId;
+        $orderPayment->description    = $description;
+        $orderPayment->order_code     = $orderCode;
+        $orderPayment->user_id        = $getUserId;
         $orderPayment->save();
-        $cancelUrl    = route('admin.payment.mbbank.cancel');
-//                $returnUrl = route('admin.payment.mbbank.success');
+        $cancelUrl = route('admin.payment.mbbank.cancel');
+        //                $returnUrl = route('admin.payment.mbbank.success');
         $YOUR_DOMAIN = $request->getSchemeAndHttpHost();
         $data        = [
             "orderCode"   => $orderCode,
@@ -44,7 +54,7 @@ class PaymentController extends Controller
                              . "/admin/payment/mbbank/success?amount={$getAmount}&payment_status=1&order_code={$orderCode}",
             "cancelUrl"   => $YOUR_DOMAIN
                              . "/admin/payment/mbbank/cancel?order_code={$orderCode}",
-//            "cancelUrl"   => $cancelUrl,
+            //            "cancelUrl"   => $cancelUrl,
         ];
         error_log($data['orderCode']);
 
@@ -97,6 +107,9 @@ class PaymentController extends Controller
             "message" => "Ok",
             "data"    => $body["data"],
         ]);
+    }
+    public function vnpay(){
+        return view('admin_core.content.payments.checkout_vnPay');
     }
 
     public function createOrder(Request $request)
@@ -157,13 +170,33 @@ class PaymentController extends Controller
 
     public function successPayment(Request $request)
     {
-        $payment_status = intval($request->get('payment_status'));
-        $order_code = $request->get('orderCode');
-        $orderPayment = OrderPayment::where('order_code',$order_code)->first();
+        $payment_status               = intval($request->get('payment_status'));
+        $order_code                   = $request->get('orderCode');
+        $orderPayment                 = OrderPayment::where('order_code',
+            $order_code)->first();
         $orderPayment->payment_status = $payment_status;
-//        dd($orderPayment);
+        //        dd($orderPayment);
         $orderPayment->save();
         $amount = intval($request->get('amount'));
+        $user   = auth()->user();
+
+        // Update the user's balance
+        $user->balance += $amount; // Assuming you have a 'balance' field in your users table
+        $user->save();
+
+        return view('admin.content.payment.success');
+
+    }
+    public function vnpaySuccess(Request $request)
+    {
+        $payment_status               = intval($request->get('payment_status'));
+        $order_code                   = $request->get('vnp_TransactionNo');
+        $orderPayment                 = OrderPayment::where('order_code',
+            $order_code)->first();
+        $orderPayment->payment_status = $payment_status;
+        //        dd($orderPayment);
+        $orderPayment->save();
+        $amount = intval($request->get('vnp_Amount'));
         $user   = auth()->user();
 
         // Update the user's balance
@@ -176,27 +209,168 @@ class PaymentController extends Controller
 
     public function cancelPayment(Request $request)
     {
-        $order_code = $request->get('order_code');
-        $orderPayment = OrderPayment::where('order_code',$order_code)->first();
+        $order_code                   = $request->get('order_code');
+        $orderPayment                 = OrderPayment::where('order_code',
+            $order_code)->first();
         $orderPayment->payment_status = '2';
         $orderPayment->save();
+
         return view('admin.content.payment.cancel');
 
     }
 
     public function index(Request $request)
     {
-//        $YOUR_DOMAIN = $request->getSchemeAndHttpHost();
-//        echo $YOUR_DOMAIN;
+        return view('admin_core.content.payments.checkout');
+    }
+    //    public function report(Request $request)
+    //    {
+    //        // Lấy dữ liệu từ bảng order_payment
+    //        $userId = $request->get('user_id');
+    //        $date = $request->get('date');
+    //        $month = $request->get('month');
+    //
+    //        // Truy vấn danh sách user đã nạp tiền
+    //        $users = DB::table('order_payment')
+    //                   ->join('users', 'order_payment.user_id', '=', 'users.id')
+    //                   ->select('users.id', 'users.name')
+    //                   ->groupBy('users.id', 'users.name')
+    //                   ->get();
+    //
+    //        // Truy vấn dữ liệu tổng hợp
+    //        $query = DB::table('order_payment')
+    //                   ->join('users', 'order_payment.user_id', '=', 'users.id')
+    //                   ->select(
+    //                       'users.name',
+    //                       'users.id as user_id',
+    //                       DB::raw('SUM(order_payment.amount) as total_amount'),
+    //                       DB::raw('COUNT(order_payment.id) as total_orders'),
+    //                       DB::raw('DATE(order_payment.created_at) as created_date'),
+    //                       DB::raw('MONTH(order_payment.created_at) as created_month')
+    //                   )
+    //                   ->groupBy('users.id', 'users.name', 'created_date', 'created_month');
+    //
+    //        // Áp dụng bộ lọc
+    //        if ($userId) {
+    //            $query->where('users.id', $userId);
+    //        }
+    //        if ($date) {
+    //            $query->whereDate('order_payment.created_at', $date);
+    //        }
+    //        if ($month) {
+    //            $query->whereMonth('order_payment.created_at', $month);
+    //        }
+    //
+    //        $data = $query->get();
+    //
+    //        // Tìm người nạp nhiều nhất
+    //        $topUser = $data->sortByDesc('total_amount')->first();
+    //        $payments = OrderPayment::all();
+    //
+    //        // Tính toán thống kê
+    //        $totalAmount = $payments->sum('amount');
+    //        $paymentStatusCounts = $payments->groupBy('payment_status')->map->count();
+    //
+    //        return view('admin_core.content.payments.report', compact('data', 'users', 'topUser','totalAmount', 'paymentStatusCounts'));
+    //    }
+    public function report(Request $request)
+    {
+        // Lấy thông tin từ request
+        $userId = $request->get('user_id');
+        $date   = $request->get('date');
+        $month  = $request->get('month');
 
-        return view('admin.content.payment.checkout');
+        // Lấy danh sách người dùng đã có giao dịch "đã thanh toán"
+        $users = DB::table('order_payment')
+                   ->join('users', 'order_payment.user_id', '=', 'users.id')
+            //                   ->where('order_payment.payment_status', 1) // Chỉ lấy giao dịch đã thanh toán
+                   ->select('users.id', 'users.name')
+                   ->groupBy('users.id', 'users.name')
+                   ->get();
+
+        // Truy vấn dữ liệu tổng hợp
+        $query = DB::table('order_payment')
+                   ->join('users', 'order_payment.user_id', '=', 'users.id')
+                               ->where('order_payment.payment_status', 1) // Chỉ tính giao dịch đã thanh toán
+                   ->select(
+                'users.name',
+                'users.id as user_id',
+                DB::raw('SUM(order_payment.amount) as total_amount'),
+                DB::raw('COUNT(order_payment.id) as total_orders'),
+                DB::raw('DATE(order_payment.created_at) as created_date'),
+                DB::raw('MONTH(order_payment.created_at) as created_month')
+            )
+                   ->groupBy('users.id', 'users.name', 'created_date',
+                       'created_month');
+
+        // Áp dụng bộ lọc
+        if ($userId) {
+            $query->where('users.id', $userId);
+        }
+        if ($date) {
+            $query->whereDate('order_payment.created_at', $date);
+        }
+        if ($month) {
+            $query->whereMonth('order_payment.created_at', $month);
+        }
+        $statusCounts = DB::table('order_payment')
+                          ->select(
+                              DB::raw('SUM(CASE WHEN payment_status = 0 THEN 1 ELSE 0 END) as pending'),
+                              DB::raw('SUM(CASE WHEN payment_status = 1 THEN 1 ELSE 0 END) as completed'),
+                              DB::raw('SUM(CASE WHEN payment_status = 2 THEN 1 ELSE 0 END) as canceled')
+                          )
+                          ->first();
+
+        // Chuẩn bị dữ liệu cho biểu đồ Pie Chart
+        $statusData = [
+            ['label' => 'Chưa thanh toán', 'count' => $statusCounts->pending],
+            ['label' => 'Đã thanh toán', 'count' => $statusCounts->completed],
+            ['label' => 'Hủy', 'count' => $statusCounts->canceled],
+        ];
+
+        $payments = DB::table('order_payment')
+                      ->select(
+                          DB::raw('DATE(created_at) as date'),
+                          DB::raw('SUM(CASE WHEN payment_status = 0 THEN 1 ELSE 0 END) as pending'),
+                          DB::raw('SUM(CASE WHEN payment_status = 1 THEN 1 ELSE 0 END) as completed'),
+                          DB::raw('SUM(CASE WHEN payment_status = 2 THEN 1 ELSE 0 END) as canceled')
+                      )
+                      ->groupBy('date')
+                      ->orderBy('date', 'ASC')
+                      ->get();
+
+        // Chuyển đổi dữ liệu để phù hợp với Chart.js
+        $labels        = $payments->pluck('date');
+        $pendingData   = $payments->pluck('pending');
+        $completedData = $payments->pluck('completed');
+        $canceledData  = $payments->pluck('canceled');
+        $data          = $query->get();
+
+        // Tìm người nạp nhiều nhất trong danh sách đã thanh toán
+        $topUser = $data->sortByDesc('total_amount')->first();
+
+        // Lấy tất cả các giao dịch đã thanh toán
+        $payments = OrderPayment::all();
+
+        // Tính toán thống kê
+        $totalAmount = $payments->sum('amount'); // Tổng số tiền đã thanh toán
+        $paymentStatusCounts
+                     = $payments->groupBy('payment_status')->map->count(); // Đếm trạng thái
+
+        return view('admin_core.content.payments.report',
+            compact('data', 'users', 'topUser', 'totalAmount',
+                'paymentStatusCounts','labels', 'pendingData', 'completedData', 'canceledData','statusData'));
     }
 
-   public function getHistoryPayment()
-   {
-       $getUserId = auth()->id();
-       $orderPayment = OrderPayment::where('user_id',$getUserId)->get();
-       return view('admin.content.payment.history', compact('orderPayment'));
-   }
+    public function getHistoryPayment()
+    {
+        $getUserId     = auth()->id();
+        $orderPayment  = OrderPayment::where('user_id', $getUserId)
+                                     ->orderBy('id', 'desc')->paginate(7);
+        $getAllPayment = OrderPayment::where('user_id', $getUserId)->get();
+
+        return view('admin_core.content.payments.history_payment',
+            compact('orderPayment', 'getAllPayment'));
+    }
 
 }

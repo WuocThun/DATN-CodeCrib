@@ -1,13 +1,11 @@
-@extends('admin.layouts.app')
-@section('navbar')
-    @include('admin.inc.navbar')
-@endsection
+@extends('admin_core.layouts.test')
+
 @section('main')
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">Thêm blog </div>
+                    <div class="card-header">Thêm danh mục phòng </div>
                     @if ($errors->any())
                         <div class="alert alert-danger">
                             <ul>

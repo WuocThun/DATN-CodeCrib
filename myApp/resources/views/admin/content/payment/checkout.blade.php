@@ -31,7 +31,7 @@
             @csrf
             <div class="checkout">
                 <div class="product">
-                    <p><strong>Tên người đặt: {{ auth()->user()->name }} </strong></p>
+                    <p><strong> Tên người nhận: {{ auth()->user()->name }} </strong></p>
                     <p><strong>Giá tiền:</strong></p>
                     <div class="input-group mb-3">
                         <input type="number" id="amount" name="amount" min="2000" max="9000000" step="1" required
@@ -42,7 +42,7 @@
                     </div>
 
                     <p id="amountText" style="margin-top: 10px;"></p>
-                    <p><strong>Số lượng:</strong> 1</p>
+{{--                    <p><strong>Số lượng:</strong> 1</p>--}}
                 </div>
 
                 <button type="submit" class="btn" id="create-payment-link-btn">

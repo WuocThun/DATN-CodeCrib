@@ -1,0 +1,20 @@
+@extends('fe.layouts.app')
+@section('header')
+    @include('fe.inc.header')
+@endsection
+@section('searchBar')
+    @include('fe.inc.search_bar')
+@endsection
+@section('hotZone')
+    @include('fe.inc.hot_zone')
+@endsection
+@section('main')
+  ?//?
+@endsection
+@section('overView')
+    @include('fe.inc.over_view')
+@endsection
+@section('footer')
+    @include('fe.inc.footer')
+@endsection
+

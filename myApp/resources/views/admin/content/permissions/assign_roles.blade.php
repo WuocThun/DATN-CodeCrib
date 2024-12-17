@@ -1,7 +1,5 @@
-@extends('admin.layouts.app')
-@section('navbar')
-    @include('admin.inc.navbar')
-@endsection
+@extends('admin_core.layouts.test')
+
 @section('main')
     <div class="container">
         <h1 class="text-2xl">Phân Quyền</h1>

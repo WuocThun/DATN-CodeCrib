@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh Điều Hướng</title>
+</head>
+<style>
+    /* Reset mặc định */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    width: 80%;
+    margin-left: 10%;
+}
+
+/* Thanh navbar */
+.navbar {
+    background-color: #f5f5f5;
+    border-bottom: 2px solid #0078d7;
+}
+
+.navbar-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+}
+
+.logo {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.logo .highlight {
+    color: red;
+}
+
+.logo p {
+    font-size: 12px;
+    margin-top: 5px;
+    color: #666;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 14px;
+}
+
+.user-info .icon {
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn-dang-tin {
+    background-color: red;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* Menu dưới */
+.navbar-bottom {
+    background-color: #0078d7;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 10px 0;
+}
+
+.navbar-bottom a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.navbar-bottom a:hover {
+    text-decoration: underline;
+}
+.flexinfo{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.imguser{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-image: url(/Demo/img/image-removebg-preview\ \(2\).png);
+    background-size: cover;
+    background-color: #cecece;
+}
+</style>
+<body>
+    <header class="navbar">
+        <div class="navbar-top">
+            <div class="logo">
+                <span>PHONGTRO</span><span class="highlight">123</span>.com
+                <p>Kênh thông tin phòng trọ số 1 Việt Nam</p>
+            </div>
+            <div class="user-info">
+                <div class="imguser">
+
+                </div>
+                <div class="flexinfo">
+                <span>Xin chào, <b>Hồ Phạm Quốc Thuận</b></span>
+                <span>Mã tài khoản: 144922</span>
+                <span>TK Chính: <b>0 VNĐ</b></span>
+                </div>
+                <span class="icon">Yêu thích</span>
+                <span class="icon">Quản lý tài khoản</span>
+                <button class="btn-dang-tin">Đăng tin miễn phí</button>
+            </div>
+        </div>
+        <nav class="navbar-bottom">
+            <a href="#">Trang chủ</a>
+            <a href="#">Cho thuê phòng trọ</a>
+            <a href="#">Nhà cho thuê</a>
+            <a href="#">Cho thuê căn hộ</a>
+            <a href="#">Cho thuê Mặt bằng</a>
+            <a href="#">Tìm người ở ghép</a>
+            <a href="#">Tin tức</a>
+            <a href="#">Bảng giá dịch vụ</a>
+        </nav>
+    </header>
+</body>
+</html>

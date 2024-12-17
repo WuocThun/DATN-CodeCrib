@@ -1,13 +1,11 @@
-@extends('admin.layouts.app')
-@section('navbar')
-    @include('admin.inc.navbar')
-@endsection
+@extends('admin_core.layouts.test')
+
 @section('main')
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <div class="card">
-                    <div class="card-header">Danh Sách Phòng</div>
+                    <div class="card-header">Danh Sách Tin thuê phòng đợi duyệt</div>
 
                     <div class="card-body">
                         @if (session('status'))
@@ -15,7 +13,6 @@
                                 {{ session('status') }}
                             </div>
                         @endif
-                        <a href="{{route('admin.rooms.create')}}" class="btn btn-success"> Thêm phòng </a>
                         <table class="table">
                             <thead>
                             <tr>
@@ -87,6 +84,15 @@
                                                 {{--                                               <a class="btn btn-secondary"--}}
                                                 {{--                                                  href="{{route('admin.blogs.preview_blogs',$myroom->id)}}">xem Blogs</a>--}}
                                                 <a class="btn btn-warning"  href="{{route('admin.rooms.viewPendingRooms',[$myroom->id])}}">Xem bài đăng</a>
+                                                <form method="post" action="{{ route('admin.room.accpectRoom', $myroom->id) }}">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-success">Duyệt bài đăng</button>
+                                                </form>
+                                                <form method="post" action="{{ route('admin.room.denialRoom', $myroom->id) }}">
+                                                    @csrf
+                                                    <button type="submit" class="btn btn-info">Từ chối</button>
+                                                </form>
+
                                                 <form method="post"  action="{{route('admin.rooms.destroy',[$myroom->id])}}">
                                                     @method('DELETE')
                                                     @csrf

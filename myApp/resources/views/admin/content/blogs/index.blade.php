@@ -1,7 +1,5 @@
-@extends('admin.layouts.app')
-@section('navbar')
-@include('admin.inc.navbar')
-@endsection
+@extends('admin_core.layouts.test')
+
 @section('main')
     <div class="container-fluid">
         <div class="row justify-content-center">
@@ -11,6 +9,11 @@
 
                     <div class="card-body">
                         @if (session('status'))
+                            <div class="alert alert-success" role="alert">
+                                {{ session('status') }}
+                            </div>
+                        @endif
+                            @if (session('status'))
                             <div class="alert alert-success" role="alert">
                                 {{ session('status') }}
                             </div>
@@ -36,7 +39,8 @@
                                             <td>{{$cate->title}}</td>
                                             <td>{{ \Illuminate\Support\Str::limit($cate->description, 50, '...') }}</td>
                                             <td>
-                                                @if($cate->status == 1)
+
+                                                    @if($cate->status == 1)
                                                     <p class="text-success btn">Hiển thị </p>
                                                 @elseif($cate->status == 0)
                                                     <p class="text-danger btn">Không hiện thị </p>

@@ -146,6 +146,7 @@ class PermissionController extends Controller
         $user->password = Hash::make($data['password']);
         $user->email    = $data['email'];
         $user->name     = $data['name'];
+        $user->cardIdNumber     = $data['cardIdNumber'];
         $user->save();
 
         return redirect()->back()->with('status', 'Thêm user Thành công');

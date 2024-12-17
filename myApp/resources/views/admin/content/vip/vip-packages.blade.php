@@ -33,7 +33,7 @@
                     <p class="card-text"><strong>Lượt xem tăng:</strong> {{ $package->boosted_views }}</p>
 
                     <!-- Form để mua gói VIP -->
-                    <form action="{{ route('admin.vip.purchase', $room->id) }}" method="POST">
+                    <form action="{{ route('admin.vip.purchase', [$room->id,$package->id]) }}" method="POST">
                         @csrf
                         <input type="hidden" name="vip_package_id" value="{{ $package->id }}">
                         <button type="submit" class="btn btn-primary">Mua Gói</button>

@@ -1,4 +1,4 @@
-@extends('admin.layouts.app')
+@extends('admin_core.layouts.test')
 @section('navbar')
     @include('admin.inc.navbar')
 @endsection
@@ -7,7 +7,7 @@
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <div class="card">
-                    <div class="card-header">Danh Sách Phòng</div>
+                    <div class="card-header">Danh sách tất cả các phòng</div>
 
                     <div class="card-body">
                         @if (session('status'))
@@ -15,7 +15,16 @@
                                 {{ session('status') }}
                             </div>
                         @endif
-                        <a href="{{route('admin.rooms.create')}}" class="btn btn-success"> Thêm phòng </a>
+                            @if (session('success'))
+                            <div class="alert alert-success" role="alert">
+                                {{ session('success') }}
+                            </div>
+                        @endif     @if (session('error'))
+                            <div class="alert alert-danger" role="alert">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+{{--                        <a href="{{route('admin.rooms.create')}}" class="btn btn-success"> Thêm phòng </a>--}}
                         <table class="table">
                             <thead>
                             <tr>

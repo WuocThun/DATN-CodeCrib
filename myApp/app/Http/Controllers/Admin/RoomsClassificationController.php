@@ -13,7 +13,7 @@ class RoomsClassificationController extends Controller
      */
     public function index()
     {
-        $getRoomsClassification = RoomsClassification::all();
+        $getRoomsClassification = RoomsClassification::withCount('rooms')->get();
         return view('admin.content.rooms_classification.index',compact('getRoomsClassification'));
     }
 
@@ -62,7 +62,7 @@ class RoomsClassificationController extends Controller
      */
     public function edit(string $id)
     {
-        $roomClass = RoomsClassification::find($id);
+        $roomClass = RoomsClassification::findOrFail($id);
         return view('admin.content.rooms_classification.edit',compact('roomClass'));
     }
 
@@ -79,7 +79,7 @@ class RoomsClassificationController extends Controller
                 'title.required'       => 'Tên danh mục phải có',
             ]);
         $data              = $request->all();
-        $roomClass = RoomsClassification::find($id);
+        $roomClass = RoomsClassification::findOrFail($id);
         $roomClass->title       = $data['title'];
         $roomClass->slug        = $data['slug'];
         $roomClass->description = $data['description'];
@@ -93,8 +93,8 @@ class RoomsClassificationController extends Controller
      */
     public function destroy(string $id)
     {
-        $roomClass = RoomsClassification::find($id);
+        $roomClass = RoomsClassification::findOrFail($id);
         $roomClass->delete();
-        return redirect()->back();
+        return redirect()->back()->with('status','Xoá thành công');
     }
 }

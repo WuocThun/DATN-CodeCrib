@@ -11,5 +11,8 @@ class VIPPurchase extends Model
     public $timestamps = false;
     protected $table = 'vip_purchases';
     protected $fillable = ['room_id', 'user_id', 'vip_package_id', 'start_date', 'end_date', 'status'];
-
+    public function room()
+    {
+        return $this->belongsTo(Rooms::class);
+    }
 }

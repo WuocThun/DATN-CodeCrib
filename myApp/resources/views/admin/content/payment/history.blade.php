@@ -1,7 +1,5 @@
-@extends('admin.layouts.app')
-@section('navbar')
-    @include('admin.inc.navbar')
-@endsection
+@extends('admin_core.layouts.test')
+
 @section('main')
     <div class="col-md-3 d-none d-md-block">
         <div class="card mb-3">

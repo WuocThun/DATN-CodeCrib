@@ -7,11 +7,8 @@ use App\Models\Blogs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
-
-
 class BlogsController
 {
-
 
     public function accept_blog(Request $request, $id)
     {
@@ -23,6 +20,101 @@ class BlogsController
         return redirect()->back();
     }
 
+//    public function report(Request $request)
+//    {
+//
+//        // Lọc ngày bắt đầu và ngày kết thúc từ request
+//        $startDate = $request->input('start_date');
+//        $endDate = $request->input('end_date');
+//
+//        // Query cơ bản
+//        $query = Blogs::query();
+//
+//        // Nếu có ngày bắt đầu hoặc ngày kết thúc, thêm điều kiện lọc
+//        if ($startDate) {
+//            $query->whereDate('created_at', '>=', $startDate);
+//        }
+//
+//        if ($endDate) {
+//            $query->whereDate('created_at', '<=', $endDate);
+//        }
+//
+//        // Tổng số blog sau khi áp dụng bộ lọc
+//        $totalBlogs = $query->count();
+//
+//        // Số blog đã được duyệt và chưa duyệt
+//        $approvedBlogs = $query->where('status', 1)->count();
+//        $pendingBlogs = $query->where('status', 0)->count();
+//
+//        // Người dùng có nhiều blog nhất
+//        $topUser = $query->selectRaw('user_id, COUNT(*) as total_blogs')
+//                         ->groupBy('user_id')
+//                         ->orderBy('total_blogs', 'DESC')
+//                         ->with('users') // Eager load để lấy thông tin user
+//                         ->first();
+//
+//        // Lý do từ chối phổ biến nhất
+//        $commonRejectReason = $query->selectRaw('reject_reason, COUNT(*) as total_reasons')
+//                                    ->whereNotNull('reject_reason')
+//                                    ->groupBy('reject_reason')
+//                                    ->orderBy('total_reasons', 'DESC')
+//                                    ->first();
+//
+//        // Thống kê blog theo ngày
+//        $blogsByDate = $query->selectRaw('DATE(created_at) as date, COUNT(*) as total_blogs')
+//                             ->groupBy('date')
+//                             ->orderBy('date', 'DESC')
+//                             ->get();
+//
+//        return view('admin.content.blogs.statistics', compact(
+//            'totalBlogs',
+//            'approvedBlogs',
+//            'pendingBlogs',
+//            'topUser',
+//            'commonRejectReason',
+//            'blogsByDate',
+//            'startDate',
+//            'endDate'
+//        ));
+//    }
+public function report()
+{
+    // Tổng số blog
+    $totalBlogs = Blogs::count();
+
+    // Số blog đã được duyệt và chưa duyệt
+    $approvedBlogs = Blogs::where('status', 1)->count();
+    $pendingBlogs = Blogs::where('status', 0)->count();
+
+    // Người dùng có nhiều blog nhất
+    $topUser = Blogs::selectRaw('user_id, COUNT(*) as total_blogs')
+                   ->groupBy('user_id')
+                   ->orderBy('total_blogs', 'DESC')
+                   ->with('users') // Eager load để lấy thông tin user
+                   ->first();
+
+    // Lý do từ chối phổ biến nhất
+    $commonRejectReason = Blogs::selectRaw('reject_reason, COUNT(*) as total_reasons')
+                              ->whereNotNull('reject_reason')
+                              ->groupBy('reject_reason')
+                              ->orderBy('total_reasons', 'DESC')
+                              ->first();
+
+    // Thống kê blog theo ngày
+    $blogsByDate = Blogs::selectRaw('DATE(created_at) as date, COUNT(*) as total_blogs')
+                       ->groupBy('date')
+                       ->orderBy('date', 'DESC')
+                       ->get();
+
+    return view('admin.content.blogs.statistics', compact(
+        'totalBlogs',
+        'approvedBlogs',
+        'pendingBlogs',
+        'topUser',
+        'commonRejectReason',
+        'blogsByDate'
+    ));
+}
     public function decline_blog(Request $request, $id)
     {
         // Lấy tất cả dữ liệu từ form
@@ -32,19 +124,18 @@ class BlogsController
         $blog = Blogs::find($id);
 
         // Nếu không tìm thấy bài viết, trả về với thông báo lỗi
-        if (!$blog) {
+        if ( ! $blog) {
             return redirect()->back()->with('error', 'Bài viết không tồn tại.');
         }
 
         // Cập nhật trạng thái và lý do từ chối
-        $blog->status = $data['status']; // Cập nhật trạng thái thành "từ chối"
+        $blog->status        = $data['status']; // Cập nhật trạng thái thành "từ chối"
         $blog->reject_reason = $data['reason']; // Lưu lý do từ chối
         $blog->save();
 
         // Trả về trang trước với thông báo thành công
         return redirect()->back()->with('success', 'Bài viết đã bị từ chối.');
     }
-
 
     public function preview_blogs(string $id)
     {

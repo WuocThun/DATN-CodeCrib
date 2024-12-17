@@ -1,0 +1,456 @@
+/** {*/
+/*  font-weight: bold;*/
+/*}*/
+/*main,*/
+/*nav {*/
+/*  background-color: #6e91ab32;*/
+
+/*  !* background-image: linear-gradient(-100deg, rgba(34, 206, 48, 0.774), rgba(41, 199, 194, 0.774)); *!*/
+/*}*/
+/*.room-card {*/
+/*    border-radius: 10px;*/
+/*    overflow: hidden;*/
+/*    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);*/
+/*}*/
+
+/*.room-card .card-header {*/
+/*    color: #fff;*/
+/*    padding: 15px;*/
+/*    font-size: 18px;*/
+/*    position: relative;*/
+/*}*/
+
+/*.room-card .logo {*/
+/*    max-width: 50px;*/
+/*    position: absolute;*/
+/*    top: 10px;*/
+/*    left: 10px;*/
+/*}*/
+
+/*.room-name {*/
+/*    font-size: 18px;*/
+/*    font-weight: bold;*/
+/*}*/
+
+/*.room-status {*/
+/*    font-size: 14px;*/
+/*    margin-top: 5px;*/
+/*}*/
+
+/*.room-info button {*/
+/*    margin-right: 5px;*/
+/*}*/
+
+/*.room-type-btn {*/
+/*    font-size: 12px;*/
+/*    padding: 3px 10px;*/
+/*}*/
+
+/*.actions button {*/
+/*    width: 40px;*/
+/*    height: 40px;*/
+/*}*/
+
+/*.actions .btn-purple {*/
+/*    background-color: #6f42c1;*/
+/*    color: #fff;*/
+/*}*/
+/*.status-room{*/
+/*    padding: 4px 2px;*/
+/*}*/
+/*h3 {*/
+/*  color: rgb(0, 0, 0);*/
+/*  background-color: #ffffff;*/
+/*  padding: 10px;*/
+/*  border-radius: 5px;*/
+/*}*/
+/*label {*/
+/*  color: rgb(255, 70, 63);*/
+/*}*/
+
+/*thead {*/
+/*  color: rgb(255, 255, 255);*/
+/*  background-color: rgba(252, 38, 38, 0.887);*/
+/*}*/
+/*.btn {*/
+/*  display: flex;*/
+/*  align-items: center;*/
+/*  justify-content: center;*/
+/*  padding: 15px;*/
+/*  border-radius: 5px;*/
+/*  text-decoration: none;*/
+/*  color: #fff;*/
+/*  font-size: 1rem;*/
+/*  text-align: center;*/
+/*}*/
+/*.card-footer {*/
+/*    font-size: 14px;*/
+/*    font-weight: 500; !* Tăng độ đậm nhẹ cho chữ *!*/
+/*    background-color: #f8f9fa; !* Màu nền sáng *!*/
+/*    border-top: 1px solid #ddd; !* Thêm đường kẻ phân cách *!*/
+/*    padding: 10px 15px; !* Khoảng cách bên trong *!*/
+/*}*/
+
+/*.card-footer .col-md-6 {*/
+/*    display: flex;*/
+/*    align-items: center;*/
+/*    justify-content: center;*/
+/*    padding: 5px; !* Thêm khoảng cách giữa các cột *!*/
+/*}*/
+
+/*.card-footer p {*/
+/*    margin: 0; !* Loại bỏ khoảng cách mặc định của thẻ <p> *!*/
+/*    color: #333; !* Màu chữ tối hơn *!*/
+/*}*/
+
+/*.btn-danger {*/
+/*  background-color: #dc3545;*/
+/*  border-color: #dc3545;*/
+/*}*/
+
+/*.btn-danger:hover {*/
+/*  background-color: #c82333;*/
+/*  border-color: #bd2130;*/
+/*}*/
+
+/*.btn-warning {*/
+/*  background-color: #ffc107;*/
+/*  border-color: #ffc107;*/
+/*}*/
+
+/*.btn-warning:hover {*/
+/*  background-color: #e0a800;*/
+/*  border-color: #d39e00;*/
+/*}*/
+
+/*!* List group styles *!*/
+/*.list-group-item {*/
+/*  margin: 5px;*/
+/*  display: flex;*/
+/*  align-items: center;*/
+/*  padding: 10px;*/
+/*  border: 1px solid #dee2e6;*/
+/*  border-radius: 5px;*/
+/*  background-color: #fff;*/
+/*  color: #000;*/
+/*  text-decoration: none;*/
+/*  transition: background-color 0.3s, transform 0.3s;*/
+/*  position: relative;*/
+/*}*/
+
+/*.list-group-item:hover {*/
+/*  background-color: #2883bc; !* Light pink on hover *!*/
+/*  transform: scale(1.02);*/
+/*  color: white;*/
+/*}*/
+
+/*.list-group-item svg {*/
+/*  margin-right: 10px;*/
+/*}*/
+
+/*.list-group-item .feather-chevron-right {*/
+/*  position: absolute;*/
+/*  right: 10px;*/
+/*  top: 50%;*/
+/*  transform: translateY(-50%);*/
+/*}*/
+
+/*.sidebar {*/
+/*  background-color: #e9ecef; !* Soft gray *!*/
+/*  padding: 1rem;*/
+/*  width: 100%;*/
+/*  box-sizing: border-box;*/
+/*}*/
+
+/*.user_info {*/
+/*  background-color: #fff;*/
+/*  padding: 10px;*/
+/*  border-radius: 5px;*/
+/*  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);*/
+/*  display: flex;*/
+/*  flex-direction: column;*/
+/*  align-items: center;*/
+/*}*/
+
+/*.user_avatar img {*/
+/*  border-radius: 50%;*/
+/*  width: 50px;*/
+/*  height: 50px;*/
+/*}*/
+
+/*.user_meta {*/
+/*  text-align: center;*/
+/*}*/
+
+/*.user_name {*/
+/*  font-weight: bold;*/
+/*  font-size: 1.1rem;*/
+/*}*/
+
+/*.user_verify {*/
+/*  color: #555;*/
+/*  font-size: 0.9rem;*/
+/*}*/
+
+/*.nav-sidebar .nav-item {*/
+/*  margin-top: 10px;*/
+/*}*/
+
+/*.nav-sidebar .nav-link svg {*/
+/*  margin-right: 10px;*/
+/*}*/
+
+/*.nav-sidebar .nav-link img {*/
+/*  margin-left: auto;*/
+/*}*/
+
+/*.contact-info {*/
+/*  display: flex;*/
+/*  align-items: center;*/
+/*  background-color: #fff9e6;*/
+/*  padding: 10px;*/
+/*  margin: 10px 0;*/
+/*  border-radius: 5px;*/
+/*}*/
+
+/*.contact-info i {*/
+/*  opacity: 0.1;*/
+/*  margin-right: 10px;*/
+/*}*/
+
+/*.contact-info span {*/
+/*  font-weight: bold;*/
+/*}*/
+
+/*.nav-sidebar {*/
+/*  padding-left: 0;*/
+/*  margin-bottom: 0;*/
+/*  list-style: none;*/
+/*}*/
+/*.nav-sidebar .nav-link {*/
+/*  display: block;*/
+/*  color: #495057; !* Dark gray *!*/
+/*  text-decoration: none;*/
+/*  padding: 10px;*/
+/*  border-radius: 5px;*/
+/*  background-color: #ffffff; !* Soft gray *!*/
+/*  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);*/
+/*  transition: background-color 0.3s, transform 0.3s;*/
+/*  width: 100%; !* Full width *!*/
+/*  box-sizing: border-box;*/
+/*  min-width: 200px; !* Ensure minimum width *!*/
+/*}*/
+
+/*.nav-sidebar .nav-link:hover {*/
+/*  background-color: #4098eb; !* Light blue on hover *!*/
+/*  transform: scale(1.05);*/
+/*  color: white;*/
+/*}*/
+
+/*.sidebar {*/
+/*  width: 260px;*/
+/*}*/
+
+/*!* Container styling *!*/
+/*.addfund_method_list {*/
+/*  display: grid;*/
+/*  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));*/
+/*  gap: 20px;*/
+/*  padding: 20px;*/
+/*  justify-content: center;*/
+/*  background-color: #f4f4f9;*/
+/*}*/
+
+/*!* Card styling *!*/
+/*.method_item {*/
+/*  border-radius: 8px;*/
+/*  overflow: hidden;*/
+/*  text-align: center;*/
+/*  padding: 20px;*/
+/*  background-color: #ffffff;*/
+/*  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);*/
+/*  transition: box-shadow 0.3s ease, transform 0.3s ease;*/
+/*}*/
+
+/*.method_item:hover {*/
+/*  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);*/
+/*  transform: translateY(-5px);*/
+/*}*/
+
+/*!* Icon styling *!*/
+/*.method_item_icon img {*/
+/*  height: 70px;*/
+/*  margin-bottom: 15px;*/
+/*  transition: transform 0.3s;*/
+/*}*/
+
+/*.method_item:hover .method_item_icon img {*/
+/*  transform: scale(1.1);*/
+/*}*/
+
+/*!* Title styling *!*/
+/*.method_item_name {*/
+/*  font-size: 1.2em;*/
+/*  font-weight: bold;*/
+/*  color: #333;*/
+/*  margin-bottom: 15px;*/
+/*}*/
+
+/*!* Button styling *!*/
+/*.btn_select_method {*/
+/*  background-color: #ff6b6b;*/
+/*  color: #fff;*/
+/*  border: none;*/
+/*  padding: 10px 20px;*/
+/*  font-size: 1em;*/
+/*  border-radius: 5px;*/
+/*  cursor: pointer;*/
+/*  display: none;*/
+/*  transition: background-color 0.3s ease;*/
+/*}*/
+
+/*.btn_select_method:hover {*/
+/*  background-color: #ff4b4b;*/
+/*}*/
+
+/*.pagination {*/
+/*    margin-top: 30px;*/
+/*    display: flex;*/
+/*    gap: 10px;*/
+/*    background-color: #fff;*/
+/*    padding: 15px;*/
+/*    border-radius: 5px;*/
+/*    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);*/
+
+/*}*/
+
+/*.pagination button {*/
+/*    padding: 8px 15px;*/
+/*    border: none;*/
+/*    border-radius: 5px;*/
+/*    background-color: #eee;*/
+/*    cursor: pointer;*/
+/*    transition: background-color 0.3s;*/
+
+/*}*/
+
+/*.pagination button.active {*/
+/*    background-color: #f05050;*/
+/*    color: #fff;*/
+/*}*/
+
+/*.pagination button:hover {*/
+/*    background-color: #ddd;*/
+/*}*/
+
+/*.pagination button:focus {*/
+/*    outline: none;*/
+/*}*/
+/*.pagination {*/
+/*    display: flex;*/
+/*    justify-content: center;*/
+/*    gap: 5px;*/
+/*    margin-top: 20px;*/
+/*}*/
+
+/*.pagination .prev,*/
+/*.pagination .next,*/
+/*.pagination .page {*/
+/*    padding: 8px 12px;*/
+/*    border: 1px solid #ccc;*/
+/*    color: #333;*/
+/*    text-decoration: none;*/
+/*    background-color: #f9f9f9;*/
+/*    transition: background-color 0.2s ease-in-out;*/
+/*}*/
+
+/*.pagination .page.active {*/
+/*    background-color: #007bff;*/
+/*    color: #fff;*/
+/*    font-weight: bold;*/
+/*}*/
+
+/*.pagination .prev:hover,*/
+/*.pagination .next:hover,*/
+/*.pagination .page:hover {*/
+/*    background-color: #ddd;*/
+/*}*/
+
+/*.pagination .prev[disabled],*/
+/*.pagination .next[disabled] {*/
+/*    cursor: not-allowed;*/
+/*    opacity: 0.5;*/
+/*}*/
+.pagination {
+    margin-top: 30px;
+    display: flex;
+    gap: 10px;
+    background-color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+
+}
+
+.pagination button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: #eee;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+}
+
+.pagination button.active {
+    background-color: #f05050;
+    color: #fff;
+}
+
+.pagination button:hover {
+    background-color: #ddd;
+}
+
+.pagination button:focus {
+    outline: none;
+}
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 20px;
+}
+
+.pagination .prev,
+.pagination .next,
+.pagination .page {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    color: #333;
+    text-decoration: none;
+    background-color: #f9f9f9;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.pagination .page.active {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+}
+
+.pagination .prev:hover,
+.pagination .next:hover,
+.pagination .page:hover {
+    background-color: #ddd;
+}
+
+.pagination .prev[disabled],
+.pagination .next[disabled] {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+
+*{
+    text-decoration: black;
+}

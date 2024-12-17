@@ -22,6 +22,11 @@ class User extends Authenticatable
         'avatar',
         'balance',
         'password',
+        'code',
+        'card_id_number',
+        'expire_at',
+        'rand_code_user',
+        'motel_id',
     ];
 
     /**
@@ -46,4 +51,53 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+    public function deductBalance($amount)
+    {
+        $this->balance -= $amount;
+        $this->save();
+    }
+    public function activateVIPStatus()
+    {
+        $this->is_vip = true;
+        $this->save();
+    }
+    public function genarateCode()
+    {
+        $this->timestamps = false;
+        $this->code       = rand(1000, 9999);
+        $this->expire_at  = now()->addMinute(10);
+        $this->save();
+    }
+    public  function restCode()
+    {
+        $this->timestamps = false;
+        $this->code       = null;
+        $this->expire_at  = null;
+        $this->save();
+    }
+    public function wishlist()
+    {
+        return $this->hasMany(Wishlist::class);
+    }
+    public function motels_request()
+    {
+        return $this->belongsToMany(Motel::class, 'motel_user', 'user_id', 'motel_id')
+                    ->withTimestamps();
+    }
+
+    public function motel()
+    {
+        return $this->belongsTo(Motel::class, 'motel_id');
+    }
+    public function roomRequests()
+    {
+        return $this->hasMany(RoomRequest::class);
+    }
+    public function motels()
+    {
+        return $this->belongsToMany(Motel::class, 'room_requests')
+                    ->withPivot('status')
+                    ->withTimestamps();
+    }
+
 }

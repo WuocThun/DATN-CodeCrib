@@ -2,12 +2,16 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Models\User;
+use App\Notifications\TwoFactorCode;
+//use http\Client;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Twilio\Rest\Client;
 
 class LoginRequest extends FormRequest
 {
@@ -49,6 +53,21 @@ class LoginRequest extends FormRequest
             ]);
         }
 
+        $user = User::where('email',$this->input('email'))->first();
+        $user->genarateCode();
+
+        $user->notify(new TwoFactorCode());
+
+
+//        $message = "Mã OTP Xác thực của bạn là:".$user->code;
+//        $account_sid= getenv("TWILIO_SID");
+//        $auth_token = getenv("TWILIO_TOKEN");
+//        $twilio_number = getenv("TWILIO_PHONE");
+//        $client = new Client($account_sid,$auth_token);
+//        $client->messages->create('+84906138104',[
+//            'from' => $twilio_number,
+//            'body' => $message
+//        ]);
         RateLimiter::clear($this->throttleKey());
     }
 

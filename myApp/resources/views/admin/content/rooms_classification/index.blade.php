@@ -1,13 +1,11 @@
-@extends('admin.layouts.app')
-@section('navbar')
-    @include('admin.inc.navbar')
-@endsection
+@extends('admin_core.layouts.test')
+
 @section('main')
     <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-md-10">
                 <div class="card">
-                    <div class="card-header">Danh Sách Blog</div>
+                    <div class="card-header">Danh Sách phân loại phòng</div>
 
                     <div class="card-body">
                         @if (session('status'))
@@ -23,8 +21,7 @@
                                     <thead>
                                     <th scope="col">ID</th>
                                     <th scope="col">Tên danh mục</th>
-                                    <th scope="col">Phòng</th>
-                                    <th scope="col">Loại tin</th>
+                                    <th scope="col">Có bao nhiêu phòng thuộc</th>
                                     <th scope="col">Quản lý</th>
                                     </thead>
                                     <tbody>
@@ -32,8 +29,7 @@
                                         <tr>
                                             <th scope="row">{{$key+1}}</th>
                                             <td>{{$classification->title}}</td>
-                                            <td>{{ \Illuminate\Support\Str::limit($classification->description, 50, '...') }}</td>
-                                            <td>{{$classification->room_id}}</td>
+                                            <td>{{ $classification->rooms_count }}</td> <!-- Số lượng phòng -->
 
                                             <td>
                                                 <a class="btn btn-warning"  href="{{route('admin.rooms_classification.edit',$classification->id)}}">Sửa</a>

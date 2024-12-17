@@ -18,4 +18,9 @@ class RoomsClassification extends Model
             'description',
             'slug',
         ];
+    // Mối quan hệ với bảng Rooms
+    public function rooms()
+    {
+        return $this->hasMany(Rooms::class, 'rooms_class_id');
+    }
 }

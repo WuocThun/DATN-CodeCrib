@@ -1,13 +1,10 @@
-@extends('admin.layouts.app')
-@section('navbar')
-    @include('admin.inc.navbar')
-@endsection
+@extends('admin_core.layouts.test')
 @section('main')
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">Thêm blog </div>
+                    <div class="card-header">Thêm danh mục <phòng></phòng> </div>
                     @if ($errors->any())
                         <div class="alert alert-danger">
                             <ul>
@@ -23,14 +20,14 @@
                                 {{ session('status') }}
                             </div>
                         @endif
-                            <a href="{{route('admin.blogs.index')}}" class="btn btn-warning">Tất cả danh mục </a>
+                            <a href="{{route('admin.rooms_classification.index')}}" class="btn btn-warning">Tất cả danh mục </a>
 
                         <form action="{{route('admin.rooms_classification.store')}}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Tên Danh mục</label>
-                                <input type="text"  name="title" class="form-control" placeholder="...."
-                                       onkeyup="ChangeToSlug();" id="slug">
+{{--                                <input type="text"  name="title" class="form-control" placeholder="...."--}}
+{{--                                       onkeyup="ChangeToSlug();" id="slug">--}}
                             </div>
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Slug</label>
