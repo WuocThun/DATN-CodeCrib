@@ -15,4 +15,8 @@ class VIPPurchase extends Model
     {
         return $this->belongsTo(Rooms::class);
     }
+    public function vipPackage()
+    {
+        return $this->belongsTo(VipPackage::class, 'vip_package_id');
+    }
 }

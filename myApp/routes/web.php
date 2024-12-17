@@ -330,6 +330,10 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
                  Route::get('/rooms/{room}/vip-packages',
                      [VIPController::class, 'showVIPPackages'])
                       ->name('vip.packages');
+                 Route::get('/danh-sach-cac-phong-vip',
+                     [VIPController::class, 'getVipRooms'])
+                      ->name('vip.getVipRooms')->middleware('role:admin');
+
                  Route::post('/rooms/{room}/vip-purchase/{vipPackageId}',
                      [VIPController::class, 'purchaseVIPPackage'])
                       ->name('vip.purchase');
@@ -337,6 +341,10 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
                      [VIPController::class, 'activateVip']);
                  Route::post('/deactivate-vip',
                      [VIPController::class, 'deactivateVip']);
+                 Route::post('/vip-rooms/{id}/deactivate', [VIPController::class, 'deactivate'])
+                      ->name('vipRooms.deactivate');
+                 Route::delete('/vip-rooms/{id}', [VIPController::class, 'deleteVip'])
+                      ->name('vipRooms.deleteVip');
              });
          });
          Route::resource('vong-quay-may-man', WheelController::class)

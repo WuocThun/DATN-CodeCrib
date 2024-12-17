@@ -43,6 +43,7 @@
                 <a class="collapse-item" href="{{route('admin.rooms.getPendingRooms')}}">Phòng đang đợi duyệt</a>
                 <a class="collapse-item" href="{{route('admin.rooms.allRooms')}}">Danh sách các phòng</a>
                 <a class="collapse-item" href="{{route('admin.room.report')}}">Thống kê phòng</a>
+                <a class="collapse-item" href="{{route('admin.vip.getVipRooms')}}">Danh sách tin mua VIP</a>
                 @endrole
             </div>
         </div>
