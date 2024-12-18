@@ -160,13 +160,7 @@ class MotelController extends Controller
     {
 
         $userId      = Auth::id();
-        $getAllMotel = Motel::where('user_id', $userId)->orderBy('id', 'desc')
-                            ->get();
-        //        $motels = Motel::with(['contracts.tenant'])
-        //                       ->withCount(['users', 'contracts'])
-        //                       ->where('user_id', $userId)
-        //                       ->orderBy('id', 'desc')
-        //                       ->get();
+        $getAllMotel = Motel::where('user_id', $userId)->orderBy('id', 'desc')->get();
         $motels = Motel::with([
             'contracts' => function ($query) {
                 $query->with('tenant'); // Lấy thông tin người thuê qua quan hệ tenant
@@ -183,7 +177,39 @@ class MotelController extends Controller
         return view('admin_core.content.motel.index',
             compact('getAllMotel', 'motels'));
     }
+    public function getAllMotel()
+    {
 
+        $userId      = Auth::id();
+        $getAllMotel = Motel::get();
+        $motels = Motel::with([
+            'contracts' => function ($query) {
+                $query->with('tenant'); // Lấy thông tin người thuê qua quan hệ tenant
+            },
+        ])
+                       ->withCount([
+                           'users',
+                           'contracts',
+                       ]) // Đếm số lượng users và contracts
+                       ->orderBy('id', 'desc')
+                       ->get();
+
+        return view('admin_core.content.motel.index',
+            compact('getAllMotel', 'motels'));
+    }
+
+
+    public function getUserMotelAdmin(Request $request, string $id)
+    {
+        $motelId  = $id;
+        $getMotel = Motel::findOrFail($id);
+
+        $getUserRentMotel = User::where('motel_id', $motelId)->get();
+
+        return view('admin_core.content.motel.addUserMotel',
+            compact('getMotel', 'getUserRentMotel'));
+
+    }
     public function storeUserMotel(Request $request, string $id)
     {
         $data       = $request->validate([
@@ -279,15 +305,28 @@ class MotelController extends Controller
 
     public function addUserMotel(Request $request, string $id)
     {
-        $motelId  = $id;
+        $user = auth()->user(); // Lấy thông tin người dùng hiện tại (phải đăng nhập)
+
+        // Kiểm tra người dùng có thuê phòng motel với id này hay không
+        $isUserInMotel = User::where('id', $user->id)
+                             ->where('motel_id', $id)
+                             ->exists();
+
+        if (!$isUserInMotel) {
+            // Nếu người dùng không thuộc motel này, ngăn chặn truy cập
+            abort(403, 'Bạn không có quyền truy cập vào thông tin của phòng này.');
+        }
+
+        // Lấy thông tin motel
         $getMotel = Motel::findOrFail($id);
 
-        $getUserRentMotel = User::where('motel_id', $motelId)->get();
+        // Lấy danh sách tất cả người dùng thuê phòng trong motel này
+        $getUserRentMotel = User::where('motel_id', $id)->get();
 
-        return view('admin_core.content.motel.addUserMotel',
-            compact('getMotel', 'getUserRentMotel'));
-
+        // Trả về view kèm dữ liệu
+        return view('admin_core.content.motel.addUserMotel', compact('getMotel', 'getUserRentMotel'));
     }
+
 
     public function create()
     {

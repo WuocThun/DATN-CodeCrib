@@ -6,15 +6,6 @@
     <main role="main" class="ml-sm-auto col">
         @include('admin_core.inc.sub_main')
         <div class="main-box">
-{{--            <div class="note alert alert-success js-promotion-payment-daily" role="alert">--}}
-{{--                <p><strong>Khuyến mãi:</strong></p>--}}
-{{--                <ul>--}}
-{{--                    <li>Nạp từ 50.000 đến dưới 1.000.000 tặng <strong>10%</strong></li>--}}
-{{--                    <li>Nạp từ 1.000.000 đến dưới 2.000.000 tặng <strong>20%</strong></li>--}}
-{{--                    <li>Nạp từ 2.000.000 trở lên tặng <strong>25%</strong></li>--}}
-{{--                </ul>--}}
-{{--            </div>--}}
-
             <div class="payment-form">
                 <form action="{{ route('admin.vnpay.store') }}" method="post">
                     @csrf
@@ -24,8 +15,8 @@
 
                             <label for="amount"><strong>Giá tiền:</strong></label>
                             <div class="input-group mb-3">
-                                <input type="number" id="amount" name="amount" class="form-control" min="2000"
-                                       max="9000000" step="1" required
+                                <input type="number" id="amount" name="amount" class="form-control" min="10000"
+                                       max="1000000000" step="1" required
                                        oninput="convertAmount()" placeholder="Nhập số tiền...">
                                 <div class="input-group-append">
                                     <span class="input-group-text">VNĐ</span>

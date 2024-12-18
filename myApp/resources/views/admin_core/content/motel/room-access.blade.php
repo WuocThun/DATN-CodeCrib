@@ -4,9 +4,6 @@
 
     <main role="main" class="ml-sm-auto col">
         @include('admin_core.inc.sub_main')
-        <a href="{{route('admin.motel.create')}}">
-            <button type="button" class="mb-3 mt-2 btn btn-secondary">Thêm phòng</button>
-        </a>
         {{--        <button data-user-id="{{ auth()->id() }}" class="add-more-motel btn zalo-btn">Thêm vào danh sách yêu thích</button>--}}
         @if (session('success'))
             <div class="alert alert-success">

@@ -41,18 +41,17 @@
                                 <td>{{ $vip->end_date }}</td>
                                 <td>
                                     @if ($vip->status === 'active')
-                                        <form action="{{ route('admin.vipRooms.deleteVip', $vip->id) }}" method="POST" class="d-inline">
+                                        <span class="badge bg-primary">Đang hoạt động</span>
+                                        <form action="{{ route('admin.vipRooms.deactivate', $vip->id) }}" method="POST" class="d-inline">
                                             @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn xoá gói VIP này không?');">
-                                                Xoá Gói VIP
+                                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Bạn có chắc muốn tắt gói VIP này không?');">
+                                                Tắt VIP
                                             </button>
                                         </form>
                                     @else
-                                        <span class="badge bg-secondary">Không có VIP</span>
+                                        <span class="badge bg-info">{{ ucfirst($vip->status) }}</span>
                                     @endif
                                 </td>
-
 
                             </tr>
                         @empty

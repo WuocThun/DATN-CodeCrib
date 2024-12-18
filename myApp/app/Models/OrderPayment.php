@@ -15,6 +15,7 @@ class OrderPayment extends Model
             'amount',
             'description',
             'payment_status',
+            'bank_name',
             'order_code',
             'user_id',
         ];

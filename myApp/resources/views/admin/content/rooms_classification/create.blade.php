@@ -26,13 +26,13 @@
                             @csrf
                             <div class="form-group">
                                 <label for="exampleInputEmail1">Tên Danh mục</label>
-{{--                                <input type="text"  name="title" class="form-control" placeholder="...."--}}
-{{--                                       onkeyup="ChangeToSlug();" id="slug">--}}
+                                <input type="text"  name="title" class="form-control" placeholder="...."
+                                       onkeyup="ChangeToSlug();" id="slug">
                             </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Slug</label>
+{{--                            <div class="form-group">--}}
+{{--                                <label for="exampleInputEmail1">Slug</label>--}}
                                 <input type="text" name="slug" hidden class="form-control" placeholder="...." id="convert_slug">
-                            </div>
+{{--                            </div>--}}
 
                             <div class="form-group">
                                 <label for="exampleInputPassword1">Description</label>

@@ -358,7 +358,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Tiêu Đề</th>
-                    {{--                        <th>Tỉnh</th>--}}
+                    <th>Tỉnh</th>
                     <th>Giá</th>
                     <th>Ngày Đăng</th>
                 </tr>
@@ -370,10 +370,10 @@
                         <td>{{ $room->title }}</td>
                         @foreach($allProvinceData as $provider)
 
-                        @if($room->province ==$provider['province_id']  )
+                            @if($room->province ==$provider['province_id']  )
                                 <td>{{$provider['province_name']}}</td>
-                        @else
-                        @endif
+                            @else
+                            @endif
                         @endforeach
                         <td>{{ number_format($room->price, 0, ',', '.') }} VND</td>
                         <td>{{ \Carbon\Carbon::parse($room->created_at)->format('d/m/Y') }}</td>

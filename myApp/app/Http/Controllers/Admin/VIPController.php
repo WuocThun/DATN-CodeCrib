@@ -17,6 +17,14 @@ class VIPController extends Controller
     public function getVipRooms()
     {
         $vipRooms = VipPurchase::with(['room', 'vipPackage'])
+                               ->where('status', 'canceled')
+                               ->orderBy('start_date', 'DESC')
+                               ->get();
+        return view('admin_core.content.vip.index', compact('vipRooms'));
+    }
+    public function getCancelVipRooms()
+    {
+        $vipRooms = VipPurchase::with(['room', 'vipPackage'])
                                ->where('status', 'active')
                                ->orderBy('start_date', 'DESC')
                                ->get();
@@ -85,10 +93,13 @@ class VIPController extends Controller
         try {
             // Tìm và xoá gói VIP đã mua
             $vipPurchase = VipPurchase::findOrFail($id);
+            $roomId=  $vipPurchase->room_id;
+            $getRoom = Rooms::findOrFail($roomId);
+            $getRoom->vip_package_id = 1;
             $vipPurchase->delete();
 
             // Chuyển hướng với thông báo thành công
-            return redirect()->back()->with('success', 'Gói VIP đã được xoá thành công.');
+            return redirect()->back()->with('success', 'Gói VIP đã được huỷ thành công.');
         } catch (\Exception $e) {
             // Xử lý lỗi
             return redirect()->back()->with('error', 'Có lỗi xảy ra khi xoá gói VIP: ' . $e->getMessage());
@@ -99,6 +110,10 @@ class VIPController extends Controller
         try {
             // Tìm gói VIP theo ID
             $vipPurchase = VipPurchase::findOrFail($id);
+            $roomId=  $vipPurchase->room_id;
+            $getRoom = Rooms::findOrFail($roomId);
+//            $getRoom->vip_package_id = 1;
+            $getRoom->update(['vip_package_id'=>1]);
 
             // Cập nhật trạng thái của gói VIP
             $vipPurchase->update(['status' => 'canceled']);

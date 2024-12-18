@@ -13,7 +13,7 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item active">
-        <a class="nav-link" href="#">
+        <a class="nav-link" href="{{route('admin.dashboardCore')}}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Giới thiệu về CodeCrib </span></a>
     </li>
@@ -44,6 +44,7 @@
                 <a class="collapse-item" href="{{route('admin.rooms.allRooms')}}">Danh sách các phòng</a>
                 <a class="collapse-item" href="{{route('admin.room.report')}}">Thống kê phòng</a>
                 <a class="collapse-item" href="{{route('admin.vip.getVipRooms')}}">Danh sách tin mua VIP</a>
+                <a class="collapse-item" href="{{route('admin.vip.getCancelVipRooms')}}">Danh sách tin mua VIP</a>
                 @endrole
             </div>
         </div>
@@ -122,6 +123,7 @@
                 @role('admin')
                 <h6 class="collapse-header">Nâng cao</h6>
                 <a class="collapse-item" href="{{route('admin.statistics')}}">Báo cáo các phòng</a>
+                <a class="collapse-item" href="{{route('admin.motel.getAllMotel')}}">Tất cả phòng trọ</a>
                 @endrole
             </div>
         </div>

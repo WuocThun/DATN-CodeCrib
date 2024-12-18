@@ -56,9 +56,15 @@ class IndexController extends Controller
     }
     public function index()
     {
+        $rooms = Rooms::with(['vipPurchases' => function($query) {
+            // Lọc các gói VIP với trạng thái 'active'
+            $query->where('status', 'active');
+        }])
+                      ->orderByDesc('vip_package_id') // Sắp xếp theo gói VIP từ cao xuống thấp
+                      ->orderByDesc('created_at')     // Sau đó sắp xếp theo ngày tạo phòng mới nhất
+                      ->paginate(7);
 
-        $rooms = Rooms::orderByDesc('vip_package_id')->orderByDesc('created_at')->paginate(7);
-        return view('fe.index',compact('rooms'));
+          return view('fe.index',compact('rooms'));
     }
     public function indexBlog(){
         $blogs = Blogs::paginate(5);

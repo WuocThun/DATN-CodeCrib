@@ -304,11 +304,25 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
                  Route::post('mbbank/createPaymentLink',
                      [PaymentController::class, 'createPaymentLink'])
                       ->name('payment.mbbank.createPaymentLink');
+                 Route::post('mbbank/createPaymentLinkInvionce/{id}',
+                     [PaymentController::class, 'createPaymentLinkInvionce'])
+                      ->name('payment.invoices.createPaymentLinkInvionce');
                  Route::get('mbbank/success',
                      [PaymentController::class, 'successPayment'])
                       ->name('payment.mbbank.success');
                  Route::post('mbbank/success',
                      [PaymentController::class, 'successPayment']);
+                 Route::post('invoice/success',
+                     [PaymentController::class, 'successPaymentInvoice']);
+                 Route::get('vnpay/status',
+                     [VnpayController::class, 'successPayment'])
+                      ->name('payment.vnpay.success');
+                 Route::post('vnpay/status',
+                     [VnpayController::class, 'successPayment']);
+                 Route::post('invoice/success',
+                     [PaymentController::class, 'successPaymentInvoice']);
+                 Route::post('invoice/userPayhouseRent/{id}',
+                     [PaymentController::class, 'userPayhouseRent'])->name('payment.userPayhouseRent');
                  Route::post('vnpay/success',
                      [PaymentController::class, 'vnpaySuccess'])
                       ->name('payment.vnpay.success');
@@ -333,6 +347,9 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
                  Route::get('/danh-sach-cac-phong-vip',
                      [VIPController::class, 'getVipRooms'])
                       ->name('vip.getVipRooms')->middleware('role:admin');
+                 Route::get('/danh-sach-cac-phong-vip-da-huy',
+                     [VIPController::class, 'getCancelVipRooms'])
+                      ->name('vip.getCancelVipRooms')->middleware('role:admin');
 
                  Route::post('/rooms/{room}/vip-purchase/{vipPackageId}',
                      [VIPController::class, 'purchaseVIPPackage'])
@@ -380,9 +397,10 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
          Route::group(['middleware' => ['auth']], function () {
              Route::get('/danh-sach-day-tro', [MotelController::class, 'index'])
                   ->name('motel.index')->middleware('role:admin||houseRenter');
+             Route::get('/tat-ca-danh-sach-day-tro', [MotelController::class, 'getAllMotel'])
+                  ->name('motel.getAllMotel')->middleware('role:admin');
              Route::get('/them-phong-tro', [MotelController::class, 'create'])
-                  ->name('motel.create');
-
+                  ->name('motel.create')->middleware('role:admin||houseRenter');
              Route::post('/them-phong-tro', [MotelController::class, 'store'])
                   ->name('motel.store');
              Route::get('/phong-tro/cap-nhat/{id}',
@@ -391,9 +409,12 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
                  [MotelController::class, 'update'])->name('motel.update');
              Route::delete('/phong-tro/xoa/{id}',
                  [MotelController::class, 'destroy'])->name('motel.destroy');
-             Route::get('/phong/them-nguoi-dung/{id}',
+             Route::get('/phong/{id}',
                  [MotelController::class, 'addUserMotel'])
                   ->name('motel.addUserMotel');
+             Route::get('/phong-tro/{id}',
+                 [MotelController::class, 'getUserMotelAdmin'])
+                  ->name('motel.getUserMotelAdmin');
              Route::post('/them-nguoi-dung/{id}',
                  [MotelController::class, 'storeUserMotel'])
                   ->name('motel.storeUserMotel');
@@ -416,6 +437,10 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
              Route::get('/invoices/list',
                  [InvoiceController::class, 'getIndexInvoice'])
                   ->name('invoices.getIndexInvoice')
+                  ->middleware('role:admin||houseRenter');
+             Route::delete('/invoices/deleteInvoice/{id}',
+                 [InvoiceController::class, 'deleteInvoice'])
+                  ->name('invoices.deleteInvoice')
                   ->middleware('role:admin||houseRenter');
 
              Route::get('/export-invoices', function () {

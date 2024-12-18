@@ -9,7 +9,7 @@
             <div class="card-body text-center">
                 <img src="{{ asset('uploads/logoCodeCrib.png') }}" width="300px" alt="Cancelled" class="mb-3" style="max-width: 150px;">
                 <p class="lead">
-                    Cảm ơn bạn đã sử dụng payOS! Giao dịch của bạn đã được xử lý thành công.
+                    Cảm ơn bạn. Giao dịch của bạn đã được xử lý thành công.
                 </p>
                 <p>
                     Nếu có bất kỳ câu hỏi nào, hãy gửi email tới

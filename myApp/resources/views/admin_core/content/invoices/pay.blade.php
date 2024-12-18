@@ -1,4 +1,3 @@
-
 @extends('admin_core.layouts.test')
 
 @section('main')
@@ -21,6 +20,11 @@
         @if (session('success'))
             <div class="alert alert-success">
                 {{ session('success') }}
+            </div>
+        @endif
+        @if (session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
             </div>
         @endif
         <div class="card">
@@ -64,21 +68,23 @@
 
                     @else
 
-                    <tr>
-                        <th scope="row">Số tiền ban đầu</th>
-                        <td></td>
-                        <td  class="fw-bold text-primary">{{ number_format($invoice->all_money,0,',', '.') }} VNĐ</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Thanh toán trước</th>
-                        <td>Số tiền phòng hiện tại - tiền đã trả trước = {{ number_format($invoice->prepay,0,',', '.') }} VNĐ
-                        </td>
-                        <td>{{ number_format($invoice->prepay,0,',', '.') }} VNĐ</td>
-                    </tr>
+                        <tr>
+                            <th scope="row">Số tiền ban đầu</th>
+                            <td></td>
+                            <td class="fw-bold text-primary">{{ number_format($invoice->all_money,0,',', '.') }}VNĐ
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Thanh toán trước</th>
+                            <td>Số tiền phòng hiện tại - tiền đã trả trước
+                                = {{ number_format($invoice->prepay,0,',', '.') }} VNĐ
+                            </td>
+                            <td>{{ number_format($invoice->prepay,0,',', '.') }} VNĐ</td>
+                        </tr>
                     @endif
                     <tr>
                         <th scope="row">Tiền khác ( WIFI + RÁC,..)</th>
-                        <th ></th>
+                        <th></th>
                         <td class="fw-bold text-danger">{{ number_format($invoice->money_another,0,',', '.') }} VNĐ</td>
                     </tr>
                     <tr>
@@ -93,23 +99,50 @@
                 <div class="col-md-4">
                     <button onclick="window.print()" class="btn btn-info">In hoá đơn</button>
                 </div>
-                <div class="col-md-4">
-                    <form action="{{ route('admin.invoices.acceptPay', $invoice->id) }}" method="POST"
-                          onsubmit="return confirm('Bạn có chắc chắn muốn thanh toán hóa đơn này?');">
-                        @csrf
-                        <button type="submit" class="btn btn-warning">Thanh toán</button>
-                    </form>
-                </div>
+                @if($invoice->status=='pending')
+                    @role('admin||houseRenter')
+                    <div class="col-md-4">
+                        <form action="{{ route('admin.invoices.acceptPay', $invoice->id) }}" method="POST"
+                              onsubmit="return confirm('Bạn có chắc chắn muốn thanh toán hóa đơn này?');">
+                            @csrf
+                            <button type="submit" class="btn btn-warning">Thanh toán</button>
+                        </form>
+                    </div>
+                    @endrole
+                    @role('viewer')
+                    <div class="col-md-4">
+                        <form action="{{ route('admin.payment.invoices.createPaymentLinkInvionce', $invoice->id) }}" method="POST"
+                              onsubmit="return confirm('Bạn có chắc chắn muốn thanh toán hóa đơn này?');">
+                            @csrf
+                            <input type="hidden" name="amount" value="{{$invoice->total_amount}}">
+                            <input type="hidden" name="password_motel" value="{{$invoice->motel->password}}">
+                            <button type="submit" class="btn btn-warning">Thanh toán qua QR</button>
+                        </form>
+                    </div>
+                    <div class="col-md-4">
+                        <form action="{{ route('admin.payment.userPayhouseRent', $invoice->id) }}" method="POST"
+                              onsubmit="return confirm('Bạn có chắc chắn muốn thanh toán hóa đơn này?');">
+                            @csrf
+                            <input type="hidden" name="amount" value="{{$invoice->total_amount}}">
+                            <button type="submit" class="btn btn-warning">Thanh toán qua tài khoản hệ thống</button>
+                        </form>
+                    </div>
+                    @endrole
+                @role('admin||houseRenter')
                 <div class="col-md-4">
                     <button class="btn btn-danger" data-bs-toggle="modal"
                             data-bs-target="#addMemberModal{{$invoice->id}}">
                         Thanh toán và nợ
                     </button>
                 </div>
+                @endrole
+                @endif
+
             </div>
         </div>
     </main>
-    <div class="modal fade" id="addMemberModal{{$invoice->id}}" tabindex="-1" aria-labelledby="addMemberModalLabel{{$invoice->id}}" aria-hidden="true">
+    <div class="modal fade" id="addMemberModal{{$invoice->id}}" tabindex="-1"
+         aria-labelledby="addMemberModalLabel{{$invoice->id}}" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -119,30 +152,35 @@
                 <div class="modal-body">
                     <form action="{{ route('admin.invoices.prepay')}}" method="POST">
                         @csrf
-                            <div class="row">
-                                <div class="col-md-12 mb-4">
-                                    <label for="old_electric_{{$invoice->id}}" class="form-label text-dark">Tổng tiền</label>
-                                    <input type="text" class="form-control" disabled value="{{ number_format($invoice->total_amount,0,',', '.') }} VNĐ"  name="">
-                                    <input type="text" class="form-control" hidden value="{{$invoice->id}}"  name="invoiceId">
-                                </div>
-                                <div class="col-md-12 mb-4">
-                                    <label for="prepaid_amount_{{$invoice->id}}" class="form-label text-dark">Số tiền thanh toán trước</label>
-                                    <input type="number" id="prepaid_amount_{{$invoice->id}}"
-                                           class="form-control currency-input"
-                                           max="{{$invoice->total_amount}}"
-                                           min="0"
-                                           name="prepay"
-                                           placeholder="Nhập số tiền thanh toán trước">
-                                </div>
-                                <div class="col-md-12 mb-4">
-                                    <label for="remaining_amount_{{$invoice->id}}" class="form-label text-dark">Số tiền còn nợ</label>
-                                    <input type="number" id="remaining_amount_{{$invoice->id}}"
-                                           class="form-control currency-input"
-                                           readonly
-                                           name="total_amount"
-                                           value="{{$invoice->total_amount}}">
-                                </div>
+                        <div class="row">
+                            <div class="col-md-12 mb-4">
+                                <label for="old_electric_{{$invoice->id}}" class="form-label text-dark">Tổng
+                                    tiền</label>
+                                <input type="text" class="form-control" disabled
+                                       value="{{ number_format($invoice->total_amount,0,',', '.') }} VNĐ" name="">
+                                <input type="text" class="form-control" hidden value="{{$invoice->id}}"
+                                       name="invoiceId">
                             </div>
+                            <div class="col-md-12 mb-4">
+                                <label for="prepaid_amount_{{$invoice->id}}" class="form-label text-dark">Số tiền thanh
+                                    toán trước</label>
+                                <input type="number" id="prepaid_amount_{{$invoice->id}}"
+                                       class="form-control currency-input"
+                                       max="{{$invoice->total_amount}}"
+                                       min="0"
+                                       name="prepay"
+                                       placeholder="Nhập số tiền thanh toán trước">
+                            </div>
+                            <div class="col-md-12 mb-4">
+                                <label for="remaining_amount_{{$invoice->id}}" class="form-label text-dark">Số tiền còn
+                                    nợ</label>
+                                <input type="number" id="remaining_amount_{{$invoice->id}}"
+                                       class="form-control currency-input"
+                                       readonly
+                                       name="total_amount"
+                                       value="{{$invoice->total_amount}}">
+                            </div>
+                        </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
                             <button type="submit" class="btn btn-info">Trả trước</button>
@@ -152,19 +190,19 @@
             </div>
         </div>
     </div>
-<script>
-    document.querySelector('.currency-input').addEventListener('input', function (e) {
-        const max = parseInt(e.target.getAttribute('max'));
-        const min = parseInt(e.target.getAttribute('min'));
-        let value = parseInt(e.target.value);
+    <script>
+        document.querySelector('.currency-input').addEventListener('input', function (e) {
+            const max = parseInt(e.target.getAttribute('max'));
+            const min = parseInt(e.target.getAttribute('min'));
+            let value = parseInt(e.target.value);
 
-        if (value > max) {
-            e.target.value = max; // Nếu vượt quá max, tự động đặt giá trị bằng max
-        } else if (value < min) {
-            e.target.value = min; // Nếu nhỏ hơn min, tự động đặt giá trị bằng min
-        }
-    });
-</script>
+            if (value > max) {
+                e.target.value = max; // Nếu vượt quá max, tự động đặt giá trị bằng max
+            } else if (value < min) {
+                e.target.value = min; // Nếu nhỏ hơn min, tự động đặt giá trị bằng min
+            }
+        });
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const prepaidInput = document.getElementById('prepaid_amount_{{$invoice->id}}');

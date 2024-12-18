@@ -185,12 +185,13 @@
                             </div>
                             <div class="modal-footer">
                                 @foreach ($motel->contracts as $contract)
-                                <form action="{{route('admin.contracts.cancel',['id'=>$contract->id])}}" method="POST">
-                                    @csrf
-                                    <button type="submit" class="btn btn-danger">
-                                        Hủy Hợp Đồng
-                                    </button>
-                                </form>
+                                    <form action="{{route('admin.contracts.cancel',['id'=>$contract->id])}}"
+                                          method="POST">
+                                        @csrf
+                                        <button type="submit" class="btn btn-danger">
+                                            Hủy Hợp Đồng
+                                        </button>
+                                    </form>
                                 @endforeach
 
                                 <button class="btn btn-warning" data-bs-toggle="modal"
@@ -412,17 +413,25 @@
                                 </div>
                                 <div class="actions d-flex justify-content-between">
                                     <button class="btn btn-info"
-                                            onclick="window.location.href='{{ route('admin.motel.addUserMotel', ['id' => $motel->id]) }}'">
+                                            onclick="window.location.href='{{ route('admin.motel.getUserMotelAdmin', ['id' => $motel->id]) }}'">
                                         <i class="fas fa-user"></i>
                                     </button>
                                     <button class="btn btn-warning"
                                             onclick="window.location.href='{{ route('admin.motel.edit', ['id' => $motel->id]) }}'">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-secondary" data-bs-toggle="modal"
-                                            data-bs-target="#addMemberModal{{$motel->id}}">
-                                        <i class="fas fa-calendar"></i>
-                                    </button>
+                                    @if($motel->users_count < 1 )
+{{--                                        <button class="btn btn-secondary" data-bs-toggle="modal"--}}
+{{--                                                data-bs-target="#addMemberModal{{$motel->id}}">--}}
+{{--                                            <i class="fas fa-calendar"></i>--}}
+{{--                                        </button>--}}
+{{--                                        <p>ĐÚNG</p>--}}
+                                    @else
+                                        <button class="btn btn-secondary" data-bs-toggle="modal"
+                                                data-bs-target="#addMemberModal{{$motel->id}}">
+                                            <i class="fas fa-calendar"></i>
+                                        </button>
+{{--                                        <p>HUỶ</p>--}}
                                     @if (!$motel->contracts->isNotEmpty())
                                         <button class="btn btn-primary" data-bs-toggle="modal"
                                                 data-bs-target="#addContract{{$motel->id}}">
@@ -434,6 +443,8 @@
                                             <i class='fas fa-file-contract'></i>
                                         </button>
                                     @endif
+                                    @endif
+
                                     <form action="{{ route('admin.motel.destroy', ['id' => $motel->id]) }}"
                                           method="POST" style="display: inline;">
                                         @csrf

@@ -38,18 +38,24 @@
                             <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d/m/Y') }}</td>
                             <td>
                                 <div class="row">
-                                        <button class="btn btn-success ml-3" onclick="window.location.href='{{ route('admin.invoices.pay',['id'=>$data->id])}}'">
-                                            <i class="fas fa-money-check"></i>
-                                        </button>
-{{--                                    <button class="btn btn-info" onclick="window.location.href='{{ route('admin.motel.addUserMotel', ['id' => $motel->id]) }}'">--}}
-                                    <button  class="btn btn-info ml-3" >
-                                            <i class="far fa-eye"></i>
-                                        </button>
-                                        <button class="btn btn-warning ml-3" onclick="window.location.href='{{ route('admin.motel.addUserMotel',['id'=>$data->motel->id])}}'">
-                                            <i class="fas fa-users"></i>
-                                        </button>
-                                    <button class="btn btn-danger ml-3">
-                                        <i class="fas fa-minus-circle"></i>                                        </button>
+                                    <button class="btn btn-success ml-3"
+                                            onclick="window.location.href='{{ route('admin.invoices.pay',['id'=>$data->id])}}'">
+                                        <i class="fas fa-money-check"></i>
+                                    </button>
+                                    {{--                                    <button class="btn btn-info" onclick="window.location.href='{{ route('admin.motel.addUserMotel', ['id' => $motel->id]) }}'">--}}
+                                    <button class="btn btn-info ml-3">
+                                        <i class="far fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-warning ml-3"
+                                            onclick="window.location.href='{{ route('admin.motel.getUserMotelAdmin',['id'=>$data->motel->id])}}'">
+                                        <i class="fas fa-users"></i>
+                                    </button>
+                                    <form action="{{ route('admin.invoices.deleteInvoice', $data->id) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" onclick="return confirm('Bạn có chắc muốn xoá gói VIP này không?');" class="btn btn-danger ml-3">
+                                            <i class="fas fa-minus-circle"></i></button>
+                                    </form>
                                 </div>
                             </td>
                         </tr>

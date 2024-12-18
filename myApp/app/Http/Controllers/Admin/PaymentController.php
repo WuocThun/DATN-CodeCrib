@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Invoice;
+use App\Models\Motel;
+use App\Models\User;
 use Illuminate\Http\Request;
 use PayOS\PayOS;
 use App\Models\OrderPayment;
@@ -14,15 +17,34 @@ class PaymentController extends Controller
     private $payOSClientId;
     private $payOSApiKey;
     private $payOSChecksumKey;
-    //    public function __construct()
-    //    {
-    //        $this->payOSClientId =env('PAYOS_CLIENT_ID');
-    //        $this->payOSApiKey =env('PAYOS_API_KEY');
-    //        $this->payOSChecksumKey= env('PAYOS_CHECKSUM_KEY');
-    //    }
+
     public function indexPayment()
     {
         return view('admin_core.content.payments.index');
+    }
+
+    public function userPayhouseRent(Request $request, $id)
+    {
+        $invoice = Invoice::findOrFail($id);
+        $user    = auth()->user();
+        if ($user->balance >= $request->amount) {
+            // Trừ số dư của người dùng
+            $user->balance -= $request->amount;
+            $user->save(); // Lưu số dư mới
+            $landlord
+                               = User::findOrFail($invoice->user_id); // Lấy thông tin chủ trọ
+            $landlord->balance += $request->amount;
+            $landlord->save(); // Lưu số dư mới cho chủ trọ
+            $invoice->status = 'paid';
+            $invoice->save(); // Lưu trạng thái hóa đơn
+            // Thông báo thành công và chuyển hướng
+            return redirect()->back()
+                             ->with('success', 'Hóa đơn đã được thanh toán!');
+        } else {
+            // Nếu số dư của người dùng không đủ
+            return back()->with('error',
+                'Số dư của bạn không đủ để thanh toán hóa đơn.');
+        }
     }
 
     public function createPaymentLink(Request $request)
@@ -67,6 +89,70 @@ class PaymentController extends Controller
         }
     }
 
+    public function createPaymentLinkInvionce(Request $request, $id)
+    {
+        $data          = $request->all();
+        $orderCode     = intval(substr(strval(microtime(true)
+                                              * 10000), -6));
+        $getAmount     = intval($data['amount']);
+        $passwordMotel = $data['password_motel'];
+
+        $description                  = "CK: " . $passwordMotel;
+        $orderPayment                 = new OrderPayment();
+        $orderPayment->amount         = $getAmount;
+        $orderPayment->payment_status = '0';
+        $orderPayment->user_id        = auth()->id();
+        $orderPayment->order_code     = $orderCode;
+        $orderPayment->description    = $description;
+        $orderPayment->save();
+        $cancelUrl = route('admin.payment.mbbank.cancel');
+        //                $returnUrl = route('admin.payment.mbbank.success');
+        $YOUR_DOMAIN = $request->getSchemeAndHttpHost();
+        $data        = [
+            "orderCode"   => $orderCode,
+            "amount"      => $getAmount,
+            "description" => $description,
+            "returnUrl"   => $YOUR_DOMAIN
+                             . "/admin/payment/invoice/success?amount={$getAmount}&payment_status=1&order_code={$orderCode}?password={$passwordMotel}",
+            "cancelUrl"   => $YOUR_DOMAIN
+                             . "/admin/payment/mbbank/cancel?order_code={$orderCode}",
+            //            "cancelUrl"   => $cancelUrl,
+        ];
+        error_log($data['orderCode']);
+
+        try {
+            $response = $this->payOS->createPaymentLink($data);
+
+            return redirect($response['checkoutUrl']);
+        } catch (\Throwable $th) {
+            return $this->handleException($th);
+        }
+    }
+
+    public function successPaymentInvoice(Request $request)
+    {
+        $payment_status   = intval($request->get('payment_status'));
+        $order_code       = $request->get('orderCode');
+        $orderPayment     = OrderPayment::where('order_code',
+            $order_code)->first();
+        $getPassword      = $request->get('password');
+        $getMotel         = Motel::where('password', $getPassword)->first();
+        $motelId          = $getMotel->id;
+        $getInvoice       = Invoice::where('motel_id', $motelId)->first();
+        $getUserIdInvoice = $getInvoice->user_id;
+        $getInvoice->update(['status' => 'paid']);
+        $orderPayment->payment_status = $payment_status;
+        //        dd($orderPayment);
+        $orderPayment->save();
+        $amount  = intval($request->get('amount'));
+        $getUser = User::findOrFail($getUserIdInvoice);
+        // Update the user's balance
+        $getUser->balance += $amount; // Assuming you have a 'balance' field in your users table
+        $getUser->save();
+
+        return view('admin.content.payment.success');
+    }
+
     public function handlePayOSWebhook(Request $request)
     {
         $body = json_decode($request->getContent(), true);
@@ -108,7 +194,9 @@ class PaymentController extends Controller
             "data"    => $body["data"],
         ]);
     }
-    public function vnpay(){
+
+    public function vnpay()
+    {
         return view('admin_core.content.payments.checkout_vnPay');
     }
 
@@ -179,14 +267,12 @@ class PaymentController extends Controller
         $orderPayment->save();
         $amount = intval($request->get('amount'));
         $user   = auth()->user();
-
         // Update the user's balance
         $user->balance += $amount; // Assuming you have a 'balance' field in your users table
         $user->save();
-
         return view('admin.content.payment.success');
-
     }
+
     public function vnpaySuccess(Request $request)
     {
         $payment_status               = intval($request->get('payment_status'));
@@ -291,7 +377,8 @@ class PaymentController extends Controller
         // Truy vấn dữ liệu tổng hợp
         $query = DB::table('order_payment')
                    ->join('users', 'order_payment.user_id', '=', 'users.id')
-                               ->where('order_payment.payment_status', 1) // Chỉ tính giao dịch đã thanh toán
+                   ->where('order_payment.payment_status',
+                       1) // Chỉ tính giao dịch đã thanh toán
                    ->select(
                 'users.name',
                 'users.id as user_id',
@@ -359,7 +446,8 @@ class PaymentController extends Controller
 
         return view('admin_core.content.payments.report',
             compact('data', 'users', 'topUser', 'totalAmount',
-                'paymentStatusCounts','labels', 'pendingData', 'completedData', 'canceledData','statusData'));
+                'paymentStatusCounts', 'labels', 'pendingData', 'completedData',
+                'canceledData', 'statusData'));
     }
 
     public function getHistoryPayment()
