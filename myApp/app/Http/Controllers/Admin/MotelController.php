@@ -24,6 +24,23 @@ class MotelController extends Controller
         $this->VietMapProviders = $vietnamMapService;
     }
 
+    public function acceptRequest($id)
+    {
+        // Tìm yêu cầu theo ID
+        $request = DB::table('user_requests')->where('id', $id)->first();
+
+        if ($request) {
+            // Cập nhật trạng thái
+            DB::table('user_requests')
+              ->where('id', $id)
+              ->update(['status' => 1]);
+
+            return redirect()->back()->with('success', 'Yêu cầu đã được chấp nhận.');
+        } else {
+            return redirect()->back()->with('error', 'Yêu cầu không tồn tại.');
+        }
+    }
+
     public function getMotel($slug)
     {
         $motel = Motel::where('slug',$slug)->first();
@@ -69,7 +86,49 @@ class MotelController extends Controller
         return redirect()->back()->with('success',
             'Bài đăng tìm người ở cùng đã được tạo!');
     }
+    public function getPendingUserRequestRoom()
+    {
 
+        //        $requests = UserRequest::orderBy('id','desc')->paginate(5);
+        $requests = DB::table('user_requests')
+                      ->where('user_requests.status', 0) // Chỉ định rõ bảng chứa cột status
+                      ->join('users', 'user_requests.user_id', '=', 'users.id')
+                      ->join('motel', 'user_requests.motel_id', '=', 'motel.id')
+                      ->select(
+                          'user_requests.id',
+                          'user_requests.title',
+                          'user_requests.status',
+                          'user_requests.description',
+                          'user_requests.image',
+                          'user_requests.created_at',
+                          'users.name as user_name',
+                          'motel.name as motel_name'
+                      )
+                      ->get();
+
+        return view('admin_core.content.motel.getPending', compact('requests'));
+    }
+    public function getPendingAllUserRequestRoom()
+    {
+
+        //        $requests = UserRequest::orderBy('id','desc')->paginate(5);
+        $requests = DB::table('user_requests')
+                      ->join('users', 'user_requests.user_id', '=', 'users.id')
+                      ->join('motel', 'user_requests.motel_id', '=', 'motel.id')
+                      ->select(
+                          'user_requests.id',
+                          'user_requests.title',
+                          'user_requests.status',
+                          'user_requests.description',
+                          'user_requests.image',
+                          'user_requests.created_at',
+                          'users.name as user_name',
+                          'motel.name as motel_name'
+                      )
+                      ->get();
+
+        return view('admin_core.content.motel.getPending', compact('requests'));
+    }
     public function roomAccess()
     {
         $getUserId = Auth::id();
@@ -203,7 +262,14 @@ class MotelController extends Controller
     {
         $motelId  = $id;
         $getMotel = Motel::findOrFail($id);
-
+        if ($getMotel) {
+            foreach ($getMotel->users as $user) {
+                if ($user) {
+                } else {
+                }
+            }
+        } else {
+        }
         $getUserRentMotel = User::where('motel_id', $motelId)->get();
 
         return view('admin_core.content.motel.addUserMotel',

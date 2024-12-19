@@ -68,9 +68,11 @@
                     <tr>
                         <th scope="row">{{$user->id}}</th>
                         <td>{{$user->name}}</td>
-                        <td> 0{{$user->phone_number}}</td>
+                       <td>{{ optional($user)->phone_number ?? 'Không có số điện thoại'}}</td>
                         <td>{{$getMotel->password}}</td>
-                        <td></td>
+                        <td>
+                            <button class="btn btn-danger">Xoá ra khỏi phòng trọ</button>
+                        </td>
                     </tr>
                     @endforeach
                     </tbody>

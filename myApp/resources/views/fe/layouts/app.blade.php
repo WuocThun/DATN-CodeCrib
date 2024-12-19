@@ -28,5 +28,11 @@
 @yield('overView')
 @yield('footer')
 </body>
-
+<script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+<df-messenger
+    intent="WELCOME"
+    chat-title="Codecrib"
+    agent-id="519d4cc5-1268-4795-967f-ef42a161ae95"
+    language-code="vi"
+></df-messenger>
 </html>

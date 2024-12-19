@@ -16,6 +16,7 @@ class UserRequest extends Model
             'user_id',
             'motel_id',
             'title',
+            'status',
             'image',
             'description',
         ];

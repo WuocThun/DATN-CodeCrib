@@ -7,6 +7,41 @@ use App\Models\Rooms;
 
 class CommentController extends Controller
 {
+    public function destroy($id)
+    {
+        $comment = Comment::findOrFail($id);
+
+        // Kiểm tra quyền xóa
+        if ($comment->user_id !== auth()->id()) {
+            return redirect()->back()->with('error', 'Bạn không có quyền xóa bình luận này.');
+        }
+
+        $comment->delete();
+
+        return redirect()->back()->with('success', 'Bình luận đã được xóa thành công.');
+    }
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'content' => 'required|string|max:255',
+            'rating' => 'required|integer|min:1|max:5',
+        ]);
+        $data = $request->all();
+        $comment = Comment::findOrFail($id);
+
+        // Kiểm tra quyền chỉnh sửa
+        if ($comment->user_id !== auth()->id()) {
+            return redirect()->back()->with('error', 'Bạn không có quyền chỉnh sửa bình luận này.');
+        }
+        $comment->update([
+            'content' => $data['content'],
+            'rating' => $data['rating'],
+        ]);
+
+        return redirect()->back()->with('success', 'Bình luận đã được cập nhật thành công.');
+    }
+
     public function store(Request $request)
     {
         // Validate the request data

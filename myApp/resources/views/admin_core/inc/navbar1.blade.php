@@ -122,6 +122,8 @@
                 @endrole
                 @role('admin')
                 <h6 class="collapse-header">Nâng cao</h6>
+                <a class="collapse-item" href="{{route('admin.getPendingUserRequestRoom')}}">Duyệt phòng ở ghép</a>
+                <a class="collapse-item" href="{{route('admin.getPendingAllUserRequestRoom')}}">Tất cả phòng ở ghép</a>
                 <a class="collapse-item" href="{{route('admin.statistics')}}">Báo cáo các phòng</a>
                 <a class="collapse-item" href="{{route('admin.motel.getAllMotel')}}">Tất cả phòng trọ</a>
                 @endrole

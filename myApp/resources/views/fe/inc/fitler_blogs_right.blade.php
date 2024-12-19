@@ -3,7 +3,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addMemberModalLabel">Gửi nhận xét vào phòng</h5>
+                    <h5 class="modal-title" id="addMemberModalLabel">Góp ý website</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -22,13 +22,15 @@
                             @csrf
                             <!-- Đánh giá sao -->
                             <div class="mb-3">
-                                <label for="rating" class="form-label">Đánh giá sao</label>
-                                <div class="star-rating d-flex">
-                                    @for ($i = 1; $i <= 5; $i++)
-                                        <i class="bi bi-star-fill inactive" data-value="{{ $i }}"></i>
-                                    @endfor
-                                </div>
-                                <input type="hidden" name="rating" id="rating" value="0">
+                                <label for="rating" class="form-label">Đánh giá (1-5 sao)</label>
+                                <select name="rating" id="rating" class="form-control">
+                                    <option value="">Chọn số sao</option>
+                                    <option value="1">1 - Kém</option>
+                                    <option value="2">2 - Trung bình</option>
+                                    <option value="3">3 - Khá tốt</option>
+                                    <option value="4">4 - Tốt</option>
+                                    <option value="5">5 - Xuất sắc</option>
+                                </select>
                             </div>
 
                             @if(Auth::check())

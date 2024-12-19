@@ -56,7 +56,7 @@
 
                                 {{--                            <p>{{ \Illuminate\Support\Str::limit($room1->description, 15, '...') }}</p>--}}
                                 <div class="contact-options">
-                                    <button class="btn  call-btn">Gọi {{$room1->phone_number}}</button>
+                                    <button class="btn  call-btn">Gọi {{$room1->user ? $room1->user->phone_number : 'N/A'}}</button>
                                     <a href="https://zalo.me/{{ $room1->phone_number }}" target="_blank">
                                         <button class="btn zalo-btn">Nhắn Zalo</button>
                                     </a>

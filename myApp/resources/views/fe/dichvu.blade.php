@@ -159,7 +159,7 @@
     </div>
     <div style="text-align: center; margin-bottom: 20px">
         <h3>Bảng giá dịch vụ<br/></h3>
-        Áp dụng từ ngày 31/05/2024
+        Áp dụng từ ngày 31/11/2024
     </div>
     <div class="section-content">
         <table

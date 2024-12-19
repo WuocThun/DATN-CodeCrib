@@ -140,10 +140,9 @@
                                     <div class="form-group">
                                         <label class="text-dark" for="">Trạng thái phòng</label>
                                         <select name="status" class="form-control">
-                                            <option value="1" {{ $motel->status === 1 ? 'selected' : '' }} >Đã có người
-                                                thuê
+                                            <option value="1" {{ $motel->status === 1 ? 'selected' : '' }} >Phòng tìm kiếm người cho thuê
                                             </option>
-                                            <option value="0" {{ $motel->status === 0 ? 'selected' : '' }}>Còn trống
+                                            <option value="0" {{ $motel->status === 0 ? 'selected' : '' }}>Phòng để quản lý
                                             </option>
                                         </select>
                                     </div>

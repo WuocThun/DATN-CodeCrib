@@ -68,6 +68,10 @@ class User extends Authenticatable
         $this->expire_at  = now()->addMinute(10);
         $this->save();
     }
+    public function room()
+    {
+        return $this->belongsTo(Rooms::class);
+    }
     public  function restCode()
     {
         $this->timestamps = false;

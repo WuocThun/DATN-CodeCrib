@@ -119,10 +119,10 @@ class RoomRequestController extends Controller
     {
         $request = RoomRequest::findOrFail($id);
 
-        // Kiểm tra nếu chủ trọ là người quản lý phòng
-        if ($request->motel->user_id !== auth()->id()) {
-            return back()->with('error', 'Bạn không có quyền xử lý yêu cầu này.');
-        }
+//        // Kiểm tra nếu chủ trọ là người quản lý phòng
+//        if ($request->motel->user_id !== auth()->id()) {
+//            return back()->with('error', 'Bạn không có quyền xử lý yêu cầu này.');
+//        }
 
         $motel = $request->motel;
 

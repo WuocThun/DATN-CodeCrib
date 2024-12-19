@@ -65,6 +65,8 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::post('/comments', [CommentController::class, 'store'])
          ->name('comments.store');
+    Route::put('/comments/{id}', [CommentController::class, 'update'])->name('comments.update');
+    Route::delete('/comments/{id}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
     Route::post('wishlist/add', [WhishlistController::class, 'addWishlist'])
          ->name('wishlist.add');
@@ -138,7 +140,7 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
              Route::get('blogs/get_pending_blogs',
                  [BlogsController::class, 'get_pending_blogs'])
                   ->name('get_pending_blogs')
-                  ->middleware('permission:manager blogs');
+                  ->middleware('role:admin');
              Route::get('/blog-statistics', [BlogsController::class, 'report'])
                   ->name('blog.statistics');
 
@@ -388,6 +390,11 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
                   ->name('contracts.cancel');
              Route::get('/motel/report', [MotelController::class, 'report'])
                   ->name('statistics')->middleware('role:admin');
+             Route::get('/motel/getPendingUserRequestRoom', [MotelController::class, 'getPendingUserRequestRoom'])
+                  ->name('getPendingUserRequestRoom')->middleware('role:admin');
+             Route::get('/motel/getPendingAllUserRequestRoom', [MotelController::class, 'getPendingAllUserRequestRoom'])
+                  ->name('getPendingAllUserRequestRoom')->middleware('role:admin');
+             Route::post('/accept-request/{id}', [MotelController::class, 'acceptRequest'])->name('accept.request');
 
              Route::post('/requests/create',
                  [MotelController::class, 'createRequest'])

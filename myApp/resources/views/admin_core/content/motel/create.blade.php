@@ -163,10 +163,10 @@
                         </div>
                         <div class="col-md-12">
                             <div class="form-group">
-                                <label class="text-dark" for= "">Trạng thái phòng</label>
+                                <label class="text-dark" for= "">Tình trạng quản lý phòng</label>
                                 <select name="status" class="form-control">
-                                    <option value="1">Đã có người thuê</option>
-                                    <option value="0">Còn trống</option>
+                                    <option value="1">Phòng tìm kiếm người cho thuê</option>
+                                    <option value="0">Phòng để quản lý</option>
                                 </select>
                             </div>
                         </div>

@@ -204,6 +204,7 @@
                     </div>
 
                     <h3>Thông tin liên hệ</h3>
+                        <div class="table-responsive">
 
                     <table class="table table table-striped">
                         <tr>
@@ -219,50 +220,136 @@
                             <td>{{$findUser->phone_number}}</td>
                         </tr>
                     </table>
-                    <iframe
-                        src="https://maps.google.com/maps?&hl=en&q=${{$room->full_address}}&t=&z=12&ie=UTF8&iwloc=B&output=embed"
-                        width="850"
-                        height="450"
-                        style="border: 0"
-                        allowfullscreen=""
-                        loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade"
-                    ></iframe>
-                    <p>Bạn đang xem nội dung tin đăng: "{{$room->title}} - Mã
+                        </div>
+                        <div class="ratio ratio-16x9">
+                            <iframe
+                                src="https://maps.google.com/maps?&hl=en&q=${{$room->full_address}}&t=&z=12&ie=UTF8&iwloc=B&output=embed"
+                                style="border: 0"
+                                allowfullscreen=""
+                                loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade"
+                            ></iframe>
+                        </div>
+
+                        <p>Bạn đang xem nội dung tin đăng: "{{$room->title}} - Mã
                         tin: #{{$room->id}}". Mọi thông tin liên quan đến tin đăng này chỉ mang tính chất tham khảo. Nếu
                         bạn có phản
                         hồi với tin đăng này (báo xấu, tin đã cho thuê, không liên lạc được,...), vui lòng thông báo để
                         CodeCrib có thể xử lý.</p>
                 </div>
-                @if ($room->comments->isEmpty())
+                <div class="modal fade" id="updateCommentModal" tabindex="-1" aria-labelledby="updateCommentModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form id="updateCommentForm" method="POST" action="#">
+                                @csrf
+                                @method('PUT')
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="updateCommentModalLabel">Cập nhật bình luận</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label for="commentContent" class="form-label">Nội dung bình luận</label>
+                                        <textarea class="form-control" id="commentContent" name="content" rows="4" required></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="commentRating" class="form-label">Đánh giá</label>
+                                        <select class="form-select" id="commentRating" name="rating">
+                                            <option value="1">1 Sao</option>
+                                            <option value="2">2 Sao</option>
+                                            <option value="3">3 Sao</option>
+                                            <option value="4">4 Sao</option>
+                                            <option value="5">5 Sao</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Delete Comment Modal -->
+                <div class="modal fade" id="deleteCommentModal" tabindex="-1" aria-labelledby="deleteCommentModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form id="deleteCommentForm" method="POST" action="#">
+                                @csrf
+                                @method('DELETE')
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteCommentModalLabel">Xác nhận xóa bình luận</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Bạn có chắc chắn muốn xóa bình luận này? Hành động này không thể hoàn tác.
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                    <button type="submit" class="btn btn-danger">Xóa</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            @if ($room->comments->isEmpty())
                     <p class="text-muted">Chưa có bình luận nào cho phòng này.</p>
                 @else
-                    <div class="row">
+                    <div class="row g-3">
                         @foreach ($room->comments as $comment)
-                            <div class="col-md-4">
-                            <div class="card" style="width: 18rem;">
-                                <div class="card-body">
-                                    <h5 class="card-title">Tên người đăng:  {{$comment->user->name}}</h5>
-                                    <h6 class="card-subtitle mb-2 text-muted">{{$comment->created_at}}</h6>
-                                    <p class="card-text">{{$comment->content}}.</p>
-                                    @if($comment->rating)
-                                        <!-- Display stars based on the rating -->
-                                        @for($i = 1; $i <= 5; $i++)
-                                            @if($i <= $comment->rating)
-                                                <span class="fa fa-star" style="color: gold;"></span> <!-- Full star -->
-                                            @else
-                                                <span class="fa fa-star" style="color: gray;"></span> <!-- Empty star -->
+                            <div class="col-12 col-md-6 col-lg-4">
+                                <div class="card h-100">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Tên người đăng: {{$comment->user->name}}</h5>
+                                        <h6 class="card-subtitle mb-2 text-muted">{{$comment->created_at}}</h6>
+                                        <p class="card-text">{{$comment->content}}</p>
+                                        @if($comment->rating)
+                                            <!-- Display stars based on the rating -->
+                                            @for($i = 1; $i <= 5; $i++)
+                                                @if($i <= $comment->rating)
+                                                    <span class="fa fa-star" style="color: gold;"></span> <!-- Full star -->
+                                                @else
+                                                    <span class="fa fa-star" style="color: gray;"></span> <!-- Empty star -->
+                                                @endif
+                                            @endfor
+                                        @else
+                                            <span>No rating</span> <!-- If no rating exists -->
+                                        @endif
+
+                                        <!-- Buttons for update and delete -->
+                                        <div class="mt-3">
+                                            <!-- Only show buttons if the user is authorized -->
+                                            @if(auth()->id() == $comment->user_id)
+                                                <a  href="#"
+                                                   class="btn btn-primary btn-sm"
+                                                   data-bs-toggle="modal"
+                                                   data-bs-target="#updateCommentModal"
+                                                   data-comment-id="{{ $comment->id }}"
+                                                   data-comment-content="{{ $comment->content }}"
+                                                   data-comment-rating="{{ $comment->rating }}">
+                                                    Chỉnh sửa bình luận
+                                                </a>
+                                                <button
+                                                    class="btn btn-danger btn-sm"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#deleteCommentModal"
+                                                    data-comment-id="{{ $comment->id }}">
+                                                    Xóa
+                                                </button>
                                             @endif
-                                        @endfor
-                                    @else
-                                        <span>No rating</span> <!-- If no rating exists -->
-                                    @endif
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
                             </div>
                         @endforeach
                     </div>
                 @endif
+
                 <div class="pagination">
                     {{--                <a href="{{route('getRoom',$room1->slug)}}" style="text-decoration: none;">--}}
                     {{--                    <div class="result-item">--}}
@@ -287,7 +374,42 @@
                     @include('fe.inc.comment',['roomId'=>$room->id])
                 </div>
             </div>
+<script>
 
+    document.addEventListener('DOMContentLoaded', function () {
+        const updateCommentModal = document.getElementById('updateCommentModal');
+        const updateCommentForm = document.getElementById('updateCommentForm');
+
+        updateCommentModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget; // Button that triggered the modal
+            const commentId = button.getAttribute('data-comment-id');
+            const commentContent = button.getAttribute('data-comment-content');
+            const commentRating = button.getAttribute('data-comment-rating');
+
+            // Set form action URL dynamically
+            updateCommentForm.action = `/comments/${commentId}`;
+
+            // Populate the modal fields with current comment data
+            document.getElementById('commentContent').value = commentContent;
+            document.getElementById('commentRating').value = commentRating;
+        });
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+        const deleteCommentModal = document.getElementById('deleteCommentModal');
+        const deleteCommentForm = document.getElementById('deleteCommentForm');
+
+        deleteCommentModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget; // Button that triggered the modal
+            const commentId = button.getAttribute('data-comment-id');
+
+            // Set the form action dynamically
+            deleteCommentForm.action = `/comments/${commentId}`;
+        });
+    });
+
+
+
+</script>
             @include('fe.inc.fitler_blogs_right')
         </div>
     </section>

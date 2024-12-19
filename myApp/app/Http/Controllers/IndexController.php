@@ -79,7 +79,7 @@ class IndexController extends Controller
     {
 
         //        $requests = UserRequest::orderBy('id','desc')->paginate(5);
-        $requests = UserRequest::with('user', 'motel')->orderBy('id','desc')->latest()->paginate(7);
+        $requests = UserRequest::with('user', 'motel')->where('status','1')->orderBy('id','desc')->latest()->paginate(7);
         return view('fe.kiemnguoioghep', compact('requests'));
     }
     public function getRoom($slug)

@@ -35,6 +35,10 @@ class Rooms extends Model
     {
         return $this->hasMany(Comment::class, 'room_id');
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 
     public function vipPurchases()
     {
