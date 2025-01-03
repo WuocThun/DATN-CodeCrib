@@ -204,7 +204,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="room-info my-3">
                                 @if (session("motel_unlocked_{$motel->id}"))
                                     <div class="actions d-flex justify-content-between">
@@ -227,7 +226,7 @@
                                             <i class="fas fa-share"></i>
                                         </button>
                                         <button class="btn btn-warning position-relative" data-bs-toggle="modal"
-                                                data-bs-target="#invitedUser{{$motel->id}}">
+                                                data-bs-target="#editUserRequest{{$motel->id}}">
                                             <i class="fas fa-plus"></i>
                                         </button>
 

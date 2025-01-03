@@ -111,8 +111,10 @@
              data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Danh sách phòng trọ</h6>
-                @role('viewer')
+                @role('viewer||admin')
                 <a class="collapse-item" href="{{route('admin.motel.access.form')}}">Phòng đã đăng ký</a>
+                <a class="collapse-item" href="{{route('admin.motel.editRequest',auth()->id())}}">Tin ở ghép</a>
+
                 @endrole
 
                 @role('admin|houseRenter')

@@ -13,7 +13,8 @@
                                 {{ session('status') }}
                             </div>
                         @endif
-                        <a href="{{route('admin.rooms_classification.create')}}" class="btn btn-success"> Thêm Danh mục phòng </a>
+                        <a href="{{route('admin.rooms_classification.create')}}" class="btn btn-success"> Thêm Danh mục
+                            phòng </a>
                         <table class="table">
                             <thead>
                             <tr>
@@ -32,11 +33,17 @@
                                             <td>{{ $classification->rooms_count }}</td> <!-- Số lượng phòng -->
 
                                             <td>
-                                                <a class="btn btn-warning"  href="{{route('admin.rooms_classification.edit',$classification->id)}}">Sửa</a>
-                                                <form method="post"  action="{{route('admin.rooms_classification.destroy',[$classification->id])}}">
+                                                <a class="btn btn-warning"
+                                                   href="{{route('admin.rooms_classification.edit',$classification->id)}}">Sửa</a>
+                                                <form method="post"
+                                                      action="{{route('admin.rooms_classification.destroy',[$classification->id])}}">
                                                     @method('DELETE')
                                                     @csrf
-                                                    <button onclick="return confirm('Bạn có muốn xoá?')" class="btn btn-danger">Xoá</button>
+                                                    @if($classification->id != 1)
+                                                        <button onclick="return confirm('Bạn có muốn xoá?')"
+                                                                class="btn btn-danger">Xoá
+                                                        </button>
+                                                    @endif
                                                 </form>
                                             </td>
                                         </tr>

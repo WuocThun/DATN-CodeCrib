@@ -70,9 +70,11 @@
                         <td>{{$user->name}}</td>
                        <td>{{ optional($user)->phone_number ?? 'Không có số điện thoại'}}</td>
                         <td>{{$getMotel->password}}</td>
+                        @role('admin||houseRenter')
                         <td>
                             <button class="btn btn-danger">Xoá ra khỏi phòng trọ</button>
                         </td>
+                        @endrole
                     </tr>
                     @endforeach
                     </tbody>

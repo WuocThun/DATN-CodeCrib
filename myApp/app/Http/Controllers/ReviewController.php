@@ -24,6 +24,11 @@ class ReviewController extends Controller
             $validated['user_id'] = Auth::id();
             $validated['name'] = Auth::user()->name;
             $validated['email'] = Auth::user()->email; // Lấy email từ user đăng nhập
+            $existingReview = Review::where('user_id', Auth::id())->first();
+
+            if ($existingReview) {
+                return redirect()->back()->with('error', 'Bạn chỉ được gửi một đánh giá!');
+            }
         }
 
         // Lưu đánh giá vào cơ sở dữ liệu

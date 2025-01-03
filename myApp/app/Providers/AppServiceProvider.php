@@ -63,7 +63,7 @@ class AppServiceProvider extends ServiceProvider
 
 
             // Lấy danh sách phòng để truyền vào navbar
-            $clasRoom    = RoomsClassification::take(3)->get();
+            $clasRoom    = RoomsClassification::take(4)->get();
             $randomBlogs = Blogs::inRandomOrder()->take(2)->get();
 
             // Truyền các dữ liệu vào view

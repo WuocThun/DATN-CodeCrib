@@ -23,6 +23,11 @@
                 {{ session('success') }}
             </div>
         @endif
+ @if(session('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
 
         <div class="container search-results-container">
             <div class="results-left">

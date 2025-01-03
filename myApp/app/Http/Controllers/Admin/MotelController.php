@@ -15,7 +15,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use App\Models\UserRequest;
 use App\Providers\VietMapProviders;
-
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 class MotelController extends Controller
 {
 
@@ -23,6 +24,19 @@ class MotelController extends Controller
     {
         $this->VietMapProviders = $vietnamMapService;
     }
+    public function editRequest($id)
+    {
+        // Lấy yêu cầu theo ID
+        $request = DB::table('user_requests')->where('user_id', $id)->first();
+
+        // Kiểm tra nếu yêu cầu tồn tại và người dùng hiện tại là người tạo yêu cầu
+        if ($request && auth()->id() == $request->user_id) {
+            return view('admin_core.content.motel.edit-request', compact('request'));
+        } else {
+            return redirect()->back()->with('error', 'Bạn không có quyền chỉnh sửa yêu cầu này.');
+        }
+    }
+
 
     public function acceptRequest($id)
     {
@@ -504,6 +518,52 @@ class MotelController extends Controller
         // Trả về view chỉnh sửa với dữ liệu phòng trọ
         return view('admin_core.content.motel.edit',
             compact('motel', 'invoice'));
+    }
+
+    public function updateUserRequest(Request $request,string $id)
+    {
+        // Lấy yêu cầu cần cập nhật
+        $userRequest = UserRequest::find($id);
+
+        // Kiểm tra nếu yêu cầu không tồn tại hoặc người dùng không phải là chủ yêu cầu
+        if (!$userRequest || auth()->id() !== $userRequest->user_id) {
+            return redirect()->back()->with('error', 'Yêu cầu không tồn tại hoặc bạn không có quyền chỉnh sửa.');
+        } else
+        // Xác thực dữ liệu
+        $request->validate([
+            'motel_id'    => 'required|exists:motel,id',
+            'title'       => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image'       => 'nullable|array', // Chấp nhận ảnh mới hoặc không có ảnh
+        ]);
+        $data= $request->all();
+        // Cập nhật thông tin yêu cầu
+        // Nếu có ảnh mới, xử lý và xóa ảnh cũ
+        if ($request->hasFile('image')) {
+            // Xóa ảnh cũ
+            if ($userRequest->image) {
+                $oldImages = json_decode($userRequest->image, true);
+                foreach ($oldImages as $oldImage) {
+                    if (File::exists(public_path($oldImage))) {
+                        File::delete(public_path($oldImage));
+                    }
+                }
+            }
+
+            // Xử lý ảnh mới
+            $images = [];
+            foreach ($request->file('image') as $img) {
+                $path      = 'uploads/request/';
+                $new_image = time() . '_' . uniqid() . '.' . $img->getClientOriginalExtension(); // Tạo tên file unique
+                $img->move(public_path($path), $new_image); // Lưu ảnh vào thư mục public/uploads/request/
+                $images[] = $path . $new_image; // Lưu đường dẫn đầy đủ
+            }
+            $data['image'] = json_encode($images); // Lưu thông tin ảnh vào trường `image`
+        }
+        // Cập nhật thông tin vào cơ sở dữ liệu
+        $userRequest->update($data);
+
+        return redirect()->back()->with('success', 'Bài đăng yêu cầu đã được cập nhật!');
     }
 
     public function update(Request $request, string $id)

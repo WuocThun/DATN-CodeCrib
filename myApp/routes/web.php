@@ -394,6 +394,9 @@ Route::middleware('auth', 'two_factor')->prefix('admin')->name('admin.')
                   ->name('getPendingUserRequestRoom')->middleware('role:admin');
              Route::get('/motel/getPendingAllUserRequestRoom', [MotelController::class, 'getPendingAllUserRequestRoom'])
                   ->name('getPendingAllUserRequestRoom')->middleware('role:admin');
+             Route::get('/motel/editRequest/{id}/edit', [MotelController::class, 'editRequest'])
+                  ->name('motel.editRequest')->middleware('role:viewer||admin');
+             Route::put('/updateUserRequest/{id}/update', [MotelController::class, 'updateUserRequest'])->name('updateUserRequest');
              Route::post('/accept-request/{id}', [MotelController::class, 'acceptRequest'])->name('accept.request');
 
              Route::post('/requests/create',
