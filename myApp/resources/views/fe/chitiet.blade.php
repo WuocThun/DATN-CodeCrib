@@ -252,16 +252,6 @@
                                         <label for="commentContent" class="form-label">Nội dung bình luận</label>
                                         <textarea class="form-control" id="commentContent" name="content" rows="4" required></textarea>
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="commentRating" class="form-label">Đánh giá</label>
-                                        <select class="form-select" id="commentRating" name="rating">
-                                            <option value="1">1 Sao</option>
-                                            <option value="2">2 Sao</option>
-                                            <option value="3">3 Sao</option>
-                                            <option value="4">4 Sao</option>
-                                            <option value="5">5 Sao</option>
-                                        </select>
-                                    </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
@@ -318,7 +308,7 @@
                                                 @endif
                                             @endfor
                                         @else
-                                            <span>No rating</span> <!-- If no rating exists -->
+                                            <!-- <span>No rating</span> If no rating exists -->
                                         @endif
 
                                         <!-- Buttons for update and delete -->

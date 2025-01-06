@@ -30,7 +30,7 @@
                 <th>ID</th>
                 <th>Người dùng</th>
                 <th>Nội dung</th>
-                <th>Số sao</th>
+                <!-- <th>Số sao</th> -->
                 <th>Phòng</th>
                 <th>Ngày tạo</th>
             </tr>
@@ -41,9 +41,19 @@
                     <td>{{ $comment->id }}</td>
                     <td>{{ $comment->user->name }}</td>
                     <td>{{ $comment->content }}</td>
-                    <td>{{ $comment->rating }}</td>
+                    <!-- <td>{{ $comment->rating }}</td> -->
                     <td>{{ $comment->room ? $comment->room->title : 'Không có' }}</td>
                     <td>{{ $comment->created_at }}</td>
+                    <td>
+                        @if ($comment->user_id === auth()->id())
+                            <a href="{{ route('comments.edit', $comment->id) }}" class="btn btn-warning">Sửa</a>
+                            <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn-danger bg-dark">Xóa</button>
+                            </form>
+                        @endif
+                    </td>
                 </tr>
             @empty
                 <tr>

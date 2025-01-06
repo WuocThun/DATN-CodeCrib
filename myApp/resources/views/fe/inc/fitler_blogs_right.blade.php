@@ -21,7 +21,7 @@
                         <form action="{{ route('reviews.store') }}" method="POST" class="mt-4">
                             @csrf
                             <!-- Đánh giá sao -->
-                            <div class="mb-3">
+                            <!-- <div class="mb-3">
                                 <label for="rating" class="form-label">Đánh giá (1-5 sao)</label>
                                 <select name="rating" id="rating" class="form-control">
                                     <option value="">Chọn số sao</option>
@@ -31,7 +31,7 @@
                                     <option value="4">4 - Tốt</option>
                                     <option value="5">5 - Xuất sắc</option>
                                 </select>
-                            </div>
+                            </div> -->
 
                             @if(Auth::check())
                                 <div class="mb-3">
