@@ -6,7 +6,7 @@
 @endsection
 
 @section('main')
-    <div class="password-reset-container">
+    <div class="d-flex justify-content-center align-items-center" style="min-height: 400px;">
         <div class="card">
             <div class="card-header text-center">
                 <h2>🔑 Quên Mật Khẩu</h2>
@@ -15,7 +15,7 @@
             <div class="card-body">
                 <form method="POST" action="{{ route('password.email') }}">
                     @csrf
-                    <div class="form-group mb-3">
+                    <div class="mb-3">
                         <label for="email" class="form-label">📧 Email</label>
                         <input
                             name="email"
@@ -28,12 +28,12 @@
                         <x-input-error :messages="$errors->get('email')" class="mt-2 text-danger"/>
                     </div>
 
-                    <div class="d-grid mt-4">
+                    <div class="d-grid">
                         <button type="submit" class="btn btn-primary">Gửi Liên Kết Đặt Lại Mật Khẩu</button>
                     </div>
                 </form>
             </div>
-            <div class="card-footer text-center mt-3">
+            <div class="card-footer text-center">
                 <a href="{{ route('getLogin') }}" class="text-decoration-none">🔑 Đăng nhập</a> |
                 <a href="{{ route('getReginster') }}" class="text-decoration-none">📝 Tạo tài khoản mới</a>
             </div>

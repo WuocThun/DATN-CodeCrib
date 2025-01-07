@@ -19,7 +19,6 @@ class Comment extends Model
             'motel_id',
             'room_id',
             'content',
-            'content',
             'rating',
         ];
     public function room()
